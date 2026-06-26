@@ -5,7 +5,7 @@
 
 import { motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // ─── Social links data ────────────────────────────────────────────────────────
 const socials = [
@@ -255,7 +255,7 @@ const works = [
 ];
 
 // ─── Nav Arrow Buttons ─────────────────────────────────────────────────────────
-const NavArrows = ({ onPrev, onNext }: { onPrev: () => void; onNext: () => void }) => (
+const NavArrows = ({ onPrev, onNext, showLeft, showRight }: { onPrev: () => void; onNext: () => void; showLeft: boolean; showRight: boolean }) => (
   <>
     <button
       id="nav-prev"
@@ -274,7 +274,7 @@ const NavArrows = ({ onPrev, onNext }: { onPrev: () => void; onNext: () => void 
         background: "rgba(255,255,255,0.05)",
         backdropFilter: "blur(12px)",
         color: "white",
-        display: "flex",
+        display: showLeft ? "flex" : "none",
         alignItems: "center",
         justifyContent: "center",
         cursor: "pointer",
@@ -315,7 +315,7 @@ const NavArrows = ({ onPrev, onNext }: { onPrev: () => void; onNext: () => void 
         background: "rgba(255,255,255,0.05)",
         backdropFilter: "blur(12px)",
         color: "white",
-        display: "flex",
+        display: showRight ? "flex" : "none",
         alignItems: "center",
         justifyContent: "center",
         cursor: "pointer",
@@ -344,6 +344,28 @@ const NavArrows = ({ onPrev, onNext }: { onPrev: () => void; onNext: () => void 
 // ─── App ───────────────────────────────────────────────────────────────────────
 export default function App() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [currentSection, setCurrentSection] = useState(0);
+
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const index = Math.round(container.scrollLeft / window.innerWidth);
+          setCurrentSection(index);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    handleScroll();
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const scrollBy = (dir: "left" | "right") => {
     if (!scrollRef.current) return;
@@ -353,10 +375,17 @@ export default function App() {
     });
   };
 
+  const sectionCount = 4;
+
   return (
     <div className="h-screen w-screen bg-black text-white selection:bg-accent selection:text-black overflow-hidden font-sans">
       <Navbar />
-      <NavArrows onPrev={() => scrollBy("left")} onNext={() => scrollBy("right")} />
+      <NavArrows
+        onPrev={() => scrollBy("left")}
+        onNext={() => scrollBy("right")}
+        showLeft={currentSection > 0}
+        showRight={currentSection < sectionCount - 1}
+      />
 
       <div ref={scrollRef} className="horizontal-scroll-container">
         {/* ── Home ── */}
