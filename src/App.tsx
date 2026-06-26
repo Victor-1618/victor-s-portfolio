@@ -45,52 +45,89 @@ const socials = [
     id: "fiverr",
     label: "Fiverr",
     href: "https://www.fiverr.com/s/ljawvXA",
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M19.04 4.16c0 1.03-.83 1.86-1.86 1.86s-1.86-.83-1.86-1.86S16.15 2.3 17.18 2.3s1.86.83 1.86 1.86zM24 14.05h-3.26v-4.1c0-.96-.78-1.74-1.74-1.74s-1.74.78-1.74 1.74v4.1H14v-4.1c0-2.62 2.12-4.74 4.74-4.74.66 0 1.28.13 1.86.37V5.21H24v8.84zM12.4 9.95H9.98V14h2.42v3.26H9.98V24H6.72v-6.74H4.3V14h2.42V9.95C6.72 7.33 8.84 5.2 11.46 5.2H12.4v4.75z" />
-      </svg>
-    ),
+    icon: null,
   },
 ];
 
 
 // ─── Social Icons Row ─────────────────────────────────────────────────────────
 const SocialIcons = ({ size = 16 }: { size?: number }) => (
-  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-    {socials.map((s) => (
-      <a
-        key={s.id}
-        id={`social-${s.id}`}
-        href={s.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={s.label}
-        title={s.label}
-        style={{
-          color: "rgba(156,163,175,1)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: size + 16 + "px",
-          height: size + 16 + "px",
-          borderRadius: "50%",
-          border: "1px solid rgba(255,255,255,0.1)",
-          transition: "color 0.2s ease, border-color 0.2s ease, background 0.2s ease",
-        }}
-        onMouseEnter={e => {
-          (e.currentTarget as HTMLAnchorElement).style.color = "#00E5FF";
-          (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(0,229,255,0.4)";
-          (e.currentTarget as HTMLAnchorElement).style.background = "rgba(0,229,255,0.08)";
-        }}
-        onMouseLeave={e => {
-          (e.currentTarget as HTMLAnchorElement).style.color = "rgba(156,163,175,1)";
-          (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,0.1)";
-          (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
-        }}
-      >
-        <span style={{ width: size, height: size, display: "flex" }}>{s.icon}</span>
-      </a>
-    ))}
+  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+    {socials.map((s) =>
+      s.id === "fiverr" ? (
+        // Fiverr renders as a text wordmark pill
+        <a
+          key={s.id}
+          id="social-fiverr"
+          href={s.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Fiverr"
+          title="Fiverr"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            padding: "0 10px",
+            height: size + 16 + "px",
+            borderRadius: "999px",
+            border: "1px solid rgba(255,255,255,0.1)",
+            color: "rgba(156,163,175,1)",
+            fontSize: size - 1 + "px",
+            fontWeight: 700,
+            letterSpacing: "0.04em",
+            textDecoration: "none",
+            transition: "color 0.2s ease, border-color 0.2s ease, background 0.2s ease",
+            whiteSpace: "nowrap",
+          }}
+          onMouseEnter={e => {
+            (e.currentTarget as HTMLAnchorElement).style.color = "#1DBF73";
+            (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(29,191,115,0.45)";
+            (e.currentTarget as HTMLAnchorElement).style.background = "rgba(29,191,115,0.08)";
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLAnchorElement).style.color = "rgba(156,163,175,1)";
+            (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,0.1)";
+            (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
+          }}
+        >
+          Fiverr
+        </a>
+      ) : (
+        // All other socials: circular icon button
+        <a
+          key={s.id}
+          id={`social-${s.id}`}
+          href={s.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={s.label}
+          title={s.label}
+          style={{
+            color: "rgba(156,163,175,1)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: size + 16 + "px",
+            height: size + 16 + "px",
+            borderRadius: "50%",
+            border: "1px solid rgba(255,255,255,0.1)",
+            transition: "color 0.2s ease, border-color 0.2s ease, background 0.2s ease",
+          }}
+          onMouseEnter={e => {
+            (e.currentTarget as HTMLAnchorElement).style.color = "#00E5FF";
+            (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(0,229,255,0.4)";
+            (e.currentTarget as HTMLAnchorElement).style.background = "rgba(0,229,255,0.08)";
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLAnchorElement).style.color = "rgba(156,163,175,1)";
+            (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,0.1)";
+            (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
+          }}
+        >
+          <span style={{ width: size, height: size, display: "flex" }}>{s.icon}</span>
+        </a>
+      )
+    )}
   </div>
 );
 
