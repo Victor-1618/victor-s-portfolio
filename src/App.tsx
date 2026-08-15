@@ -5,7 +5,7 @@
 
 import { motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 
 // ─── Social links data ────────────────────────────────────────────────────────
 const socials = [
@@ -132,29 +132,34 @@ const SocialIcons = ({ size = 16 }: { size?: number }) => (
 );
 
 // ─── Navbar ────────────────────────────────────────────────────────────────────
-const Navbar = () => {
+const Navbar = ({ onNavigate }: { onNavigate: (index: number) => void }) => {
+  const go = (index: number) => (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    onNavigate(index);
+  };
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-6 md:px-16 bg-black/50 backdrop-blur-md border-b border-white/5">
       <div className="text-2xl font-bold tracking-tighter font-sans">
-        <a href="#home">Victor</a>
+        <a href="#home" onClick={go(0)}>Victor</a>
       </div>
       <div className="hidden md:flex items-center gap-12 text-xs font-medium tracking-widest text-gray-400 uppercase">
-        <a href="#about" className="hover:text-accent transition-colors">About</a>
-        <a href="#services" className="hover:text-accent transition-colors">Services</a>
-        <a href="#works" className="hover:text-accent transition-colors">Works</a>
+        <a href="#about" onClick={go(1)} className="hover:text-accent transition-colors">About</a>
+        <a href="#services" onClick={go(2)} className="hover:text-accent transition-colors">Services</a>
+        <a href="#works" onClick={go(3)} className="hover:text-accent transition-colors">Works</a>
+        <a href="#contact" onClick={go(4)} className="hover:text-accent transition-colors">Contact</a>
       </div>
       <div className="flex items-center gap-4">
         <div className="hidden md:block"><SocialIcons size={14} /></div>
-        <div className="border border-white/20 px-6 py-3 text-xs font-medium tracking-widest uppercase hover:bg-white hover:text-black transition-all cursor-pointer">
+        <a href="mailto:olaiyavf@gmail.com" className="border border-white/20 px-6 py-3 text-xs font-medium tracking-widest uppercase hover:bg-white hover:text-black transition-all cursor-pointer">
           olaiyavf@gmail.com
-        </div>
+        </a>
       </div>
     </nav>
   );
 };
 
 // ─── Hero ──────────────────────────────────────────────────────────────────────
-const HeroMain = () => (
+const HeroMain = ({ onChat }: { onChat: () => void }) => (
   <div className="flex flex-col gap-6 max-w-xl">
     <motion.h1
       initial={{ opacity: 0, y: 20 }}
@@ -178,10 +183,10 @@ const HeroMain = () => (
       transition={{ duration: 0.6, delay: 0.4 }}
       className="flex flex-wrap items-center gap-6 mt-2"
     >
-      <button className="bg-accent text-black px-6 py-3 font-bold uppercase tracking-widest text-xs hover:brightness-110 transition-all">
+      <button onClick={onChat} className="bg-accent text-black px-6 py-3 font-bold uppercase tracking-widest text-xs hover:brightness-110 transition-all">
         Chat with me
       </button>
-      <button className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest hover:text-accent transition-all">
+      <button onClick={onChat} className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest hover:text-accent transition-all">
         <ArrowUpRight className="w-4 h-4" />
         Start a project
       </button>
@@ -341,6 +346,125 @@ const NavArrows = ({ onPrev, onNext, showLeft, showRight }: { onPrev: () => void
   </>
 );
 
+// ─── Contact ───────────────────────────────────────────────────────────────────
+const CALENDLY_URL = "https://calendly.com/olaiyavf/30min";
+
+const projectTypes = [
+  "Web App Development",
+  "Mobile App Development",
+  "UI/UX Design",
+  "E-Commerce",
+  "Tech Strategy / Consulting",
+  "Something else",
+];
+
+const inputClass =
+  "w-full bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent/60 focus:bg-white/[0.07] transition-colors";
+
+const Contact = () => {
+  const widgetRef = useRef<HTMLDivElement>(null);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    projectType: "",
+    message: "",
+  });
+
+  useEffect(() => {
+    const host = widgetRef.current;
+    if (!host) return;
+    const w = window as unknown as {
+      Calendly?: { initInlineWidget?: (opts: Record<string, unknown>) => void };
+    };
+    const init = () =>
+      w.Calendly?.initInlineWidget?.({
+        url: CALENDLY_URL,
+        parentElement: host,
+        inlineStyles: true,
+      });
+    if (typeof w.Calendly?.initInlineWidget === "function") {
+      init();
+    } else {
+      const t = setTimeout(init, 400);
+      return () => clearTimeout(t);
+    }
+  }, []);
+
+  const set =
+    (key: keyof typeof form) =>
+    (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+      setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (form.name.trim()) params.set("name", form.name.trim());
+    if (form.email.trim()) params.set("email", form.email.trim());
+    if (form.projectType) params.set("a1", form.projectType);
+    const qs = params.toString();
+    window.open(qs ? `${CALENDLY_URL}?${qs}` : CALENDLY_URL, "_blank", "noopener");
+  };
+
+  return (
+    <section id="contact" className="section-horizontal flex items-center justify-center px-8 md:px-16 border-l border-white/5">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div className="flex flex-col gap-8">
+          <div>
+            <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-6">04. Book a Call</h2>
+            <p className="text-4xl md:text-5xl font-bold tracking-tight leading-[1.1] mb-6">
+              Let's build something <span className="text-accent">great together</span>.
+            </p>
+            <p className="text-gray-400 text-base leading-relaxed max-w-md">
+              Grab a free 30-minute slot on my calendar. Tell me a bit about your project and I'll come prepared.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-2">
+                <label htmlFor="contact-name" className="text-[10px] uppercase tracking-widest text-gray-500 font-medium">Name</label>
+                <input id="contact-name" type="text" value={form.name} onChange={set("name")} placeholder="Your name" className={inputClass} required />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="contact-email" className="text-[10px] uppercase tracking-widest text-gray-500 font-medium">Email</label>
+                <input id="contact-email" type="email" value={form.email} onChange={set("email")} placeholder="you@email.com" className={inputClass} required />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="contact-type" className="text-[10px] uppercase tracking-widest text-gray-500 font-medium">Project Type</label>
+              <select id="contact-type" value={form.projectType} onChange={set("projectType")} className={inputClass} required>
+                <option value="" className="bg-black">Select a project type</option>
+                {projectTypes.map((t) => (
+                  <option key={t} value={t} className="bg-black">{t}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="contact-message" className="text-[10px] uppercase tracking-widest text-gray-500 font-medium">Message (optional)</label>
+              <textarea id="contact-message" rows={3} value={form.message} onChange={set("message")} placeholder="Tell me about your project…" className={`${inputClass} resize-none`} />
+            </div>
+
+            <button type="submit" className="self-start bg-accent text-black px-6 py-3 font-bold uppercase tracking-widest text-xs hover:brightness-110 transition-all">
+              Pick a time
+            </button>
+          </form>
+        </div>
+
+        <div className="w-full lg:pl-4">
+          <div
+            ref={widgetRef}
+            className="calendly-inline-widget"
+            data-url={CALENDLY_URL}
+            style={{ minWidth: "320px", height: "min(700px, 72vh)" }}
+          />
+        </div>
+      </div>
+    </section>
+  );
+};
+
 // ─── App ───────────────────────────────────────────────────────────────────────
 export default function App() {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -375,11 +499,19 @@ export default function App() {
     });
   };
 
-  const sectionCount = 4;
+  const scrollToSection = (index: number) => {
+    if (!scrollRef.current) return;
+    scrollRef.current.scrollTo({
+      left: index * window.innerWidth,
+      behavior: "smooth",
+    });
+  };
+
+  const sectionCount = 5;
 
   return (
     <div className="h-screen w-screen bg-black text-white selection:bg-accent selection:text-black overflow-hidden font-sans">
-      <Navbar />
+      <Navbar onNavigate={scrollToSection} />
       <NavArrows
         onPrev={() => scrollBy("left")}
         onNext={() => scrollBy("right")}
@@ -392,7 +524,7 @@ export default function App() {
         <section id="home" className="section-horizontal flex items-center justify-center">
           <main className="w-full px-8 md:px-16 grid grid-cols-1 lg:grid-cols-[1fr_1fr_auto] gap-12 xl:gap-20 items-center relative">
             <div className="flex flex-col order-2 lg:order-1">
-              <HeroMain />
+              <HeroMain onChat={() => scrollToSection(4)} />
               <Stats />
             </div>
 
@@ -528,6 +660,9 @@ export default function App() {
             </div>
           </div>
         </section>
+
+        {/* ── Contact ── */}
+        <Contact />
       </div>
 
       {/* Footer */}
