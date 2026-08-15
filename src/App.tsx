@@ -150,7 +150,7 @@ const Navbar = ({ onNavigate }: { onNavigate: (index: number) => void }) => {
       </div>
       <div className="flex items-center gap-4">
         <div className="hidden md:block"><SocialIcons size={14} /></div>
-        <a href="mailto:olaiyavf@gmail.com" className="border border-white/20 px-6 py-3 text-xs font-medium tracking-widest uppercase hover:bg-white hover:text-black transition-all cursor-pointer">
+        <a href="mailto:olaiyavf@gmail.com" className="border border-white/20 px-6 py-3 text-xs font-medium tracking-widest normal-case hover:bg-white hover:text-black transition-all cursor-pointer">
           olaiyavf@gmail.com
         </a>
       </div>
