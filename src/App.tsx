@@ -376,18 +376,18 @@ const Contact = () => {
     const w = window as unknown as {
       Calendly?: { initInlineWidget?: (opts: Record<string, unknown>) => void };
     };
-    const init = () =>
-      w.Calendly?.initInlineWidget?.({
+    const init = () => {
+      if (host.childElementCount > 0) return;
+      if (typeof w.Calendly?.initInlineWidget !== "function") return;
+      w.Calendly.initInlineWidget({
         url: CALENDLY_URL,
         parentElement: host,
         inlineStyles: true,
       });
-    if (typeof w.Calendly?.initInlineWidget === "function") {
-      init();
-    } else {
-      const t = setTimeout(init, 400);
-      return () => clearTimeout(t);
-    }
+    };
+    init();
+    const t = setInterval(init, 500);
+    return () => clearInterval(t);
   }, []);
 
   const set =
