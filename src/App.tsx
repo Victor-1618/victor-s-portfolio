@@ -255,8 +255,10 @@ const HeroMain = ({ onChat }: { onChat: () => void }) => (
       transition={{ duration: 0.6 }}
       className="text-5xl md:text-7xl font-black leading-[0.9] tracking-tighter font-sans text-accent"
     >
-      Victor is <br />
-      <TypeWriter phrases={["Right Here!", "a Developer.", "a Full-Stack Engineer.", "a Builder."]} />
+      <span className="bg-accent text-black px-1">Victor is</span> <br />
+      <span className="block mt-2">
+        <TypeWriter phrases={["Right Here!", "a Developer.", "a Full-Stack Engineer.", "a Builder."]} />
+      </span>
     </motion.h1>
     <motion.p
       initial={{ opacity: 0, y: 20 }}
