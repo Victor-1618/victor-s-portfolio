@@ -69,6 +69,25 @@
   background-size: 64px 64px;
 }
 
+/* ── Mobile: natural continuous scroll ──────────────────────────────────── */
+@media (max-width: 767px) {
+  .vertical-scroll-container,
+  .horizontal-scroll-container {
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+  }
+
+  .section-vertical,
+  .section-horizontal {
+    height: auto;
+    min-height: 100vh;
+    flex: none;
+    overflow: visible;
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
+  }
+}
+
 /* ── Print styles (resume only) ──────────────────────────────────────────── */
 @media print {
   html, body {

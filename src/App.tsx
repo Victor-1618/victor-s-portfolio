@@ -193,8 +193,29 @@ const CopyEmailButton = () => {
   );
 };
 
+// ─── Mobile detection ─────────────────────────────────────────────────────────
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const onChange = () => setIsMobile(mq.matches);
+    setIsMobile(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  return isMobile;
+};
+
 // ─── Navbar ────────────────────────────────────────────────────────────────────
-const Navbar = ({ onNavigate, currentSection }: { onNavigate: (index: number) => void; currentSection: number }) => {
+const Navbar = ({
+  onNavigate,
+  currentSection,
+  isMobile,
+}: {
+  onNavigate: (index: number) => void;
+  currentSection: number;
+  isMobile: boolean;
+}) => {
   const go = (index: number) => (e: { preventDefault: () => void }) => {
     e.preventDefault();
     onNavigate(index);
@@ -210,11 +231,12 @@ const Navbar = ({ onNavigate, currentSection }: { onNavigate: (index: number) =>
   ];
 
   const isHero = currentSection === 0;
+  const visible = isHero || isMobile;
 
   return (
     <nav
       className={`no-print fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-8 py-5 md:px-16 bg-black/80 backdrop-blur-md border-b border-white/10 transition-all duration-500 ease-in-out ${
-        isHero ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-full pointer-events-none"
+        visible ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-full pointer-events-none"
       }`}
     >
       <div className="text-2xl font-bold tracking-tighter font-sans">
@@ -773,7 +795,7 @@ const NavArrows = ({
   showUp: boolean;
   showDown: boolean;
 }) => (
-  <div className="no-print fixed right-5 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
+  <div className="no-print fixed right-5 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col gap-3">
     <button
       id="nav-prev"
       onClick={onPrev}
@@ -971,6 +993,7 @@ const Contact = () => {
 export default function App() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [currentSection, setCurrentSection] = useState(0);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const container = scrollRef.current;
@@ -980,7 +1003,21 @@ export default function App() {
     const handleScroll = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
-          const index = Math.round(container.scrollTop / window.innerHeight);
+          let index: number;
+          if (isMobile) {
+            const sections = Array.from(container.querySelectorAll<HTMLElement>("section"));
+            const mid = container.scrollTop + container.clientHeight / 2;
+            index = 0;
+            for (let i = 0; i < sections.length; i++) {
+              const top =
+                sections[i].getBoundingClientRect().top -
+                container.getBoundingClientRect().top +
+                container.scrollTop;
+              if (top <= mid) index = i;
+            }
+          } else {
+            index = Math.round(container.scrollTop / window.innerHeight);
+          }
           setCurrentSection(index);
           ticking = false;
         });
@@ -991,7 +1028,7 @@ export default function App() {
     handleScroll();
     container.addEventListener("scroll", handleScroll, { passive: true });
     return () => container.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isMobile]);
 
   const scrollByDir = (dir: "up" | "down") => {
     if (!scrollRef.current) return;
@@ -1002,18 +1039,24 @@ export default function App() {
   };
 
   const scrollToSection = (index: number) => {
-    if (!scrollRef.current) return;
-    scrollRef.current.scrollTo({
-      top: index * window.innerHeight,
-      behavior: "smooth",
-    });
+    const container = scrollRef.current;
+    if (!container) return;
+    if (isMobile) {
+      const sections = Array.from(container.querySelectorAll<HTMLElement>("section"));
+      const target = sections[index];
+      if (!target) return;
+      const top = target.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop;
+      container.scrollTo({ top, behavior: "smooth" });
+    } else {
+      container.scrollTo({ top: index * window.innerHeight, behavior: "smooth" });
+    }
   };
 
   const sectionCount = 7;
 
   return (
     <div className="h-screen w-screen bg-black text-white selection:bg-accent selection:text-black overflow-hidden font-sans">
-      <Navbar onNavigate={scrollToSection} currentSection={currentSection} />
+      <Navbar onNavigate={scrollToSection} currentSection={currentSection} isMobile={isMobile} />
       <NavArrows
         onPrev={() => scrollByDir("up")}
         onNext={() => scrollByDir("down")}
@@ -1023,7 +1066,7 @@ export default function App() {
 
       <div ref={scrollRef} className="vertical-scroll-container">
         {/* ── Home ── */}
-        <section id="home" className="section-vertical bg-grid flex items-center justify-center pt-24 pb-12">
+        <section id="home" className="section-vertical bg-grid flex items-center justify-center pt-32 md:pt-24 pb-16 md:pb-12">
           <main className="w-full px-8 md:px-16 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] gap-12 xl:gap-20 items-center relative">
             <div className="flex flex-col order-2 lg:order-1">
               <HeroMain onChat={() => scrollToSection(6)} />
