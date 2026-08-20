@@ -64,22 +64,14 @@ const TypeWriter = ({ phrases, className = "" }: { phrases: string[]; className?
 // ─── Social links data ────────────────────────────────────────────────────────
 const socials = [
   {
-    id: "website",
-    label: "Website",
-    href: "https://victor-s-portfolio-ten.vercel.app/",
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-      </svg>
-    ),
-  },
-  {
     id: "linkedin",
     label: "LinkedIn",
     href: "https://www.linkedin.com/in/victor-olaiya-935a14159/",
+    color: "#0A66C2",
+    borderColor: "rgba(10, 102, 194, 0.4)",
+    bgHover: "rgba(10, 102, 194, 0.2)",
     icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+      <svg className="w-full h-full" viewBox="0 0 24 24" fill="currentColor">
         <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" />
         <circle cx="4" cy="4" r="2" />
       </svg>
@@ -89,8 +81,11 @@ const socials = [
     id: "github",
     label: "GitHub",
     href: "https://github.com/Victor-1618",
+    color: "#FFFFFF",
+    borderColor: "rgba(255, 255, 255, 0.3)",
+    bgHover: "rgba(255, 255, 255, 0.15)",
     icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+      <svg className="w-full h-full" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z" />
       </svg>
     ),
@@ -99,89 +94,66 @@ const socials = [
     id: "fiverr",
     label: "Fiverr",
     href: "https://www.fiverr.com/s/ljawvXA",
+    color: "#1DBF73",
+    borderColor: "rgba(29, 191, 115, 0.4)",
+    bgHover: "rgba(29, 191, 115, 0.2)",
     icon: null,
   },
 ];
 
 
 // ─── Social Icons Row ─────────────────────────────────────────────────────────
-const SocialIcons = ({ size = 16 }: { size?: number }) => (
+const SocialIcons = ({ size = 18 }: { size?: number }) => (
   <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-    {socials.map((s) =>
-      s.id === "fiverr" ? (
-        // Fiverr renders as a text wordmark pill
-        <a
-          key={s.id}
-          id="social-fiverr"
-          href={s.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Fiverr"
-          title="Fiverr"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            padding: "0 10px",
-            height: size + 16 + "px",
-            borderRadius: "999px",
-            border: "1px solid rgba(255,255,255,0.1)",
-            color: "rgba(156,163,175,1)",
-            fontSize: size - 1 + "px",
-            fontWeight: 700,
-            letterSpacing: "0.04em",
-            textDecoration: "none",
-            transition: "color 0.2s ease, border-color 0.2s ease, background 0.2s ease",
-            whiteSpace: "nowrap",
-          }}
-          onMouseEnter={e => {
-            (e.currentTarget as HTMLAnchorElement).style.color = "#1DBF73";
-            (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(29,191,115,0.45)";
-            (e.currentTarget as HTMLAnchorElement).style.background = "rgba(29,191,115,0.08)";
-          }}
-          onMouseLeave={e => {
-            (e.currentTarget as HTMLAnchorElement).style.color = "rgba(156,163,175,1)";
-            (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,0.1)";
-            (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
-          }}
-        >
-          Fiverr
-        </a>
-      ) : (
-        // All other socials: circular icon button
-        <a
-          key={s.id}
-          id={`social-${s.id}`}
-          href={s.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={s.label}
-          title={s.label}
-          style={{
-            color: "rgba(156,163,175,1)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: size + 16 + "px",
-            height: size + 16 + "px",
-            borderRadius: "50%",
-            border: "1px solid rgba(255,255,255,0.1)",
-            transition: "color 0.2s ease, border-color 0.2s ease, background 0.2s ease",
-          }}
-          onMouseEnter={e => {
-            (e.currentTarget as HTMLAnchorElement).style.color = "#7DD3FC";
-            (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(125,211,252,0.4)";
-            (e.currentTarget as HTMLAnchorElement).style.background = "rgba(125,211,252,0.08)";
-          }}
-          onMouseLeave={e => {
-            (e.currentTarget as HTMLAnchorElement).style.color = "rgba(156,163,175,1)";
-            (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,0.1)";
-            (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
-          }}
-        >
-          <span style={{ width: size, height: size, display: "flex" }}>{s.icon}</span>
-        </a>
-      )
-    )}
+    {socials.map((s) => (
+      <a
+        key={s.id}
+        id={`social-${s.id}`}
+        href={s.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={s.label}
+        title={s.label}
+        style={{
+          color: s.color,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: size + 14 + "px",
+          height: size + 14 + "px",
+          borderRadius: "50%",
+          border: "none",
+          background: "transparent",
+          transition: "all 0.25s ease",
+          overflow: "hidden",
+        }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLAnchorElement).style.background = s.bgHover;
+          (e.currentTarget as HTMLAnchorElement).style.transform = "scale(1.15)";
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
+          (e.currentTarget as HTMLAnchorElement).style.transform = "scale(1)";
+        }}
+      >
+        <span style={{ width: size, height: size, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          {s.id === "fiverr" ? (
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKTIiOwryrgCwR-tSlhi67187uXnV8ER2V-BHfbH-9cg&s=10"
+              alt="Fiverr"
+              style={{
+                width: size - 2,
+                height: size - 2,
+                objectFit: "contain",
+                borderRadius: "50%",
+              }}
+            />
+          ) : (
+            s.icon
+          )}
+        </span>
+      </a>
+    ))}
   </div>
 );
 
@@ -222,26 +194,40 @@ const CopyEmailButton = () => {
 };
 
 // ─── Navbar ────────────────────────────────────────────────────────────────────
-const Navbar = ({ onNavigate }: { onNavigate: (index: number) => void }) => {
+const Navbar = ({ onNavigate, currentSection }: { onNavigate: (index: number) => void; currentSection: number }) => {
   const go = (index: number) => (e: { preventDefault: () => void }) => {
     e.preventDefault();
     onNavigate(index);
   };
+
+  const navLinks = [
+    { name: "About", index: 1, href: "#about" },
+    { name: "Skills", index: 2, href: "#skills" },
+    { name: "Services", index: 3, href: "#services" },
+    { name: "Works", index: 4, href: "#works" },
+    { name: "Resume", index: 5, href: "#resume-section" },
+    { name: "Contact", index: 6, href: "#contact" },
+  ];
+
   return (
     <nav className="no-print fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-6 md:px-16 bg-black/50 backdrop-blur-md border-b border-white/5">
       <div className="text-2xl font-bold tracking-tighter font-sans">
         <a href="#home" onClick={go(0)}>Victor</a>
       </div>
       <div className="hidden md:flex items-center gap-8 text-xs font-medium tracking-widest text-gray-400 uppercase">
-        <a href="#about" onClick={go(1)} className="hover:text-accent transition-colors">About</a>
-        <a href="#skills" onClick={go(2)} className="hover:text-accent transition-colors">Skills</a>
-        <a href="#services" onClick={go(3)} className="hover:text-accent transition-colors">Services</a>
-        <a href="#works" onClick={go(4)} className="hover:text-accent transition-colors">Works</a>
-        <a href="#resume-section" onClick={go(5)} className="hover:text-accent transition-colors">Resume</a>
-        <a href="#contact" onClick={go(6)} className="hover:text-accent transition-colors">Contact</a>
+        {navLinks.map((link) => (
+          <a
+            key={link.name}
+            href={link.href}
+            onClick={go(link.index)}
+            className={`transition-colors hover:text-accent ${currentSection === link.index ? "text-accent font-bold" : ""}`}
+          >
+            {link.name}
+          </a>
+        ))}
       </div>
       <div className="flex items-center gap-4">
-        <div className="hidden md:block"><SocialIcons size={14} /></div>
+        <div className="hidden md:block"><SocialIcons size={18} /></div>
         <div className="flex items-center border border-white/20 hover:border-white/40 transition-colors">
           <a href={`mailto:${EMAIL}`} className="px-4 md:px-6 py-3 text-xs font-medium tracking-widest normal-case hover:bg-white hover:text-black transition-all cursor-pointer">
             <span className="hidden sm:inline">{EMAIL}</span>
@@ -307,7 +293,15 @@ const Stats = () => (
 // ─── Services ──────────────────────────────────────────────────────────────────
 const ServiceItem = ({ title, description }: { title: string; description: string }) => (
   <div className="flex flex-col gap-3 max-w-xs">
-    <h3 className="text-accent font-bold uppercase tracking-widest text-[11px]">{title}</h3>
+    <h3
+      className="font-bold uppercase tracking-widest text-[11px]"
+      style={{
+        color: "#C084FC",
+        textShadow: "0 0 12px rgba(192, 132, 252, 0.5)",
+      }}
+    >
+      {title}
+    </h3>
     <p className="text-gray-400 text-xs leading-relaxed font-medium">{description}</p>
   </div>
 );
@@ -486,8 +480,7 @@ const resume = {
 const ResumeSection = () => (
   <section
     id="resume-section"
-    className="section-horizontal flex px-8 md:px-16 bg-white/5 border-l border-white/5"
-    style={{ overflowY: "auto" }}
+    className="section-vertical flex items-center justify-center px-8 md:px-16 bg-white/5 border-t border-white/5"
   >
     <div className="w-full max-w-5xl mx-auto my-auto py-10">
       <div className="no-print flex items-center justify-between mb-8">
@@ -505,7 +498,13 @@ const ResumeSection = () => (
         <div className="flex flex-col gap-2 border-b border-white/10 pb-8">
           <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-none">Victor Olaiya</h1>
           <p className="text-accent text-lg font-semibold">{resume.title}</p>
-          <p className="text-gray-400 text-sm">{EMAIL} · github.com/Victor-1618 · linkedin.com/in/victor-olaiya</p>
+          <p className="text-gray-400 text-sm flex flex-wrap items-center gap-2">
+            <a href={`mailto:${EMAIL}`} className="hover:text-accent transition-colors">{EMAIL}</a>
+            <span>·</span>
+            <a href="https://github.com/Victor-1618" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">github.com/Victor-1618</a>
+            <span>·</span>
+            <a href="https://www.linkedin.com/in/victor-olaiya-935a14159/" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">linkedin.com/in/victor-olaiya-935a14159/</a>
+          </p>
           <p className="text-gray-400 text-sm leading-relaxed max-w-3xl mt-2">{resume.summary}</p>
         </div>
 
@@ -559,92 +558,90 @@ const ResumeSection = () => (
 );
 
 // ─── Nav Arrow Buttons ─────────────────────────────────────────────────────────
-const NavArrows = ({ onPrev, onNext, showLeft, showRight }: { onPrev: () => void; onNext: () => void; showLeft: boolean; showRight: boolean }) => (
-  <>
+const NavArrows = ({
+  onPrev,
+  onNext,
+  showUp,
+  showDown,
+}: {
+  onPrev: () => void;
+  onNext: () => void;
+  showUp: boolean;
+  showDown: boolean;
+}) => (
+  <div className="no-print fixed right-5 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
     <button
       id="nav-prev"
-      className="no-print"
       onClick={onPrev}
       aria-label="Previous section"
       style={{
-        position: "fixed",
-        left: "20px",
-        top: "50%",
-        transform: "translateY(-50%)",
-        zIndex: 100,
-        width: "48px",
-        height: "48px",
+        width: "44px",
+        height: "44px",
         borderRadius: "50%",
         border: "1px solid rgba(255,255,255,0.15)",
-        background: "rgba(255,255,255,0.05)",
+        background: "rgba(0,0,0,0.5)",
         backdropFilter: "blur(12px)",
         color: "white",
-        display: showLeft ? "flex" : "none",
+        display: showUp ? "flex" : "none",
         alignItems: "center",
         justifyContent: "center",
         cursor: "pointer",
         transition: "all 0.25s ease",
       }}
-      onMouseEnter={e => {
+      onMouseEnter={(e) => {
         (e.currentTarget as HTMLButtonElement).style.background = "rgba(125,211,252,0.15)";
         (e.currentTarget as HTMLButtonElement).style.borderColor = "#7DD3FC";
         (e.currentTarget as HTMLButtonElement).style.color = "#7DD3FC";
-        (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-50%) scale(1.1)";
+        (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.1)";
       }}
-      onMouseLeave={e => {
-        (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.05)";
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLButtonElement).style.background = "rgba(0,0,0,0.5)";
         (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.15)";
         (e.currentTarget as HTMLButtonElement).style.color = "white";
-        (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-50%) scale(1)";
+        (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
       }}
     >
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M15 18l-6-6 6-6" />
+        <path d="M18 15l-6-6-6 6" />
       </svg>
     </button>
 
     <button
       id="nav-next"
-      className="no-print"
       onClick={onNext}
       aria-label="Next section"
       style={{
-        position: "fixed",
-        right: "20px",
-        top: "50%",
-        transform: "translateY(-50%)",
-        zIndex: 100,
-        width: "48px",
-        height: "48px",
+        width: "44px",
+        height: "44px",
         borderRadius: "50%",
         border: "1px solid rgba(255,255,255,0.15)",
-        background: "rgba(255,255,255,0.05)",
+        background: "rgba(0,0,0,0.5)",
         backdropFilter: "blur(12px)",
         color: "white",
-        display: showRight ? "flex" : "none",
+        display: showDown ? "flex" : "none",
         alignItems: "center",
         justifyContent: "center",
         cursor: "pointer",
         transition: "all 0.25s ease",
       }}
-      onMouseEnter={e => {
+      onMouseEnter={(e) => {
         (e.currentTarget as HTMLButtonElement).style.background = "rgba(125,211,252,0.15)";
         (e.currentTarget as HTMLButtonElement).style.borderColor = "#7DD3FC";
         (e.currentTarget as HTMLButtonElement).style.color = "#7DD3FC";
-        (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-50%) scale(1.1)";
+        (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.1)";
       }}
-      onMouseLeave={e => {
-        (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.05)";
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLButtonElement).style.background = "rgba(0,0,0,0.5)";
         (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.15)";
         (e.currentTarget as HTMLButtonElement).style.color = "white";
-        (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-50%) scale(1)";
+        (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
       }}
     >
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M9 18l6-6-6-6" />
+        <path d="M6 9l6 6 6-6" />
       </svg>
     </button>
-  </>
+  </div>
 );
 
 // ─── Contact ───────────────────────────────────────────────────────────────────
@@ -707,7 +704,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="section-horizontal flex items-center justify-center px-8 md:px-16 border-l border-white/5">
+    <section id="contact" className="section-vertical flex items-center justify-center px-8 md:px-16 border-t border-white/5">
       <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
         <div className="flex flex-col gap-8">
           <div>
@@ -779,7 +776,7 @@ export default function App() {
     const handleScroll = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
-          const index = Math.round(container.scrollLeft / window.innerWidth);
+          const index = Math.round(container.scrollTop / window.innerHeight);
           setCurrentSection(index);
           ticking = false;
         });
@@ -792,10 +789,10 @@ export default function App() {
     return () => container.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollBy = (dir: "left" | "right") => {
+  const scrollByDir = (dir: "up" | "down") => {
     if (!scrollRef.current) return;
     scrollRef.current.scrollBy({
-      left: dir === "left" ? -window.innerWidth : window.innerWidth,
+      top: dir === "up" ? -window.innerHeight : window.innerHeight,
       behavior: "smooth",
     });
   };
@@ -803,7 +800,7 @@ export default function App() {
   const scrollToSection = (index: number) => {
     if (!scrollRef.current) return;
     scrollRef.current.scrollTo({
-      left: index * window.innerWidth,
+      top: index * window.innerHeight,
       behavior: "smooth",
     });
   };
@@ -812,17 +809,17 @@ export default function App() {
 
   return (
     <div className="h-screen w-screen bg-black text-white selection:bg-accent selection:text-black overflow-hidden font-sans">
-      <Navbar onNavigate={scrollToSection} />
+      <Navbar onNavigate={scrollToSection} currentSection={currentSection} />
       <NavArrows
-        onPrev={() => scrollBy("left")}
-        onNext={() => scrollBy("right")}
-        showLeft={currentSection > 0}
-        showRight={currentSection < sectionCount - 1}
+        onPrev={() => scrollByDir("up")}
+        onNext={() => scrollByDir("down")}
+        showUp={currentSection > 0}
+        showDown={currentSection < sectionCount - 1}
       />
 
-      <div ref={scrollRef} className="horizontal-scroll-container">
+      <div ref={scrollRef} className="vertical-scroll-container">
         {/* ── Home ── */}
-        <section id="home" className="section-horizontal bg-grid flex items-center justify-center">
+        <section id="home" className="section-vertical bg-grid flex items-center justify-center">
           <main className="w-full px-8 md:px-16 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] gap-12 xl:gap-20 items-center relative">
             <div className="flex flex-col order-2 lg:order-1">
               <HeroMain onChat={() => scrollToSection(6)} />
@@ -853,7 +850,7 @@ export default function App() {
         </section>
 
         {/* ── About ── */}
-        <section id="about" className="section-horizontal bg-grid flex items-center justify-center px-8 md:px-16 border-l border-white/5">
+        <section id="about" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 border-t border-white/5">
           <div className="max-w-4xl">
             <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-8">01. About Me</h2>
             <p className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.1] mb-12">
@@ -871,13 +868,13 @@ export default function App() {
         </section>
 
         {/* ── Skills ── */}
-        <section id="skills" className="section-horizontal bg-grid flex items-center justify-center px-8 md:px-16 bg-white/5 border-l border-white/5">
+        <section id="skills" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 bg-white/5 border-t border-white/5">
           <SkillsSection />
         </section>
 
         {/* ── Services ── */}
-        <section id="services" className="section-horizontal bg-grid flex items-center justify-center px-8 md:px-16 bg-white/5 border-l border-white/5">
-          <div className="w-full">
+        <section id="services" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 bg-white/5 border-t border-white/5">
+          <div className="w-full max-w-6xl">
             <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-16">03. Services</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
               {[
@@ -896,8 +893,8 @@ export default function App() {
         </section>
 
         {/* ── Works ── */}
-        <section id="works" className="section-horizontal bg-grid flex items-center justify-center px-8 md:px-16 border-l border-white/5">
-          <div className="w-full">
+        <section id="works" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 border-t border-white/5">
+          <div className="w-full max-w-6xl">
             <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-12">04. Selected Works</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {works.map((work, i) => (
@@ -979,7 +976,7 @@ export default function App() {
         <span className="text-gray-600 text-[10px] uppercase tracking-widest text-center">
           &copy; {new Date().getFullYear()} Victor. All rights reserved.
         </span>
-        <div className="hidden md:block"><SocialIcons size={14} /></div>
+        <div className="hidden md:block"><SocialIcons size={18} /></div>
       </footer>
     </div>
   );
