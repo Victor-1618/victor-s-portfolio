@@ -975,11 +975,11 @@ export default function App() {
       </div>
 
       {/* Footer */}
-      <footer className="no-print fixed bottom-0 left-0 right-0 px-8 md:px-16 py-4 border-t border-white/5 bg-black/50 backdrop-blur-sm z-40 flex items-center justify-between">
-        <span className="text-gray-600 text-[10px] uppercase tracking-widest">
+      <footer className="no-print fixed bottom-0 left-0 right-0 px-4 md:px-16 py-4 border-t border-white/5 bg-black/50 backdrop-blur-sm z-40 flex items-center justify-center md:justify-between">
+        <span className="text-gray-600 text-[10px] uppercase tracking-widest text-center">
           &copy; {new Date().getFullYear()} Victor. All rights reserved.
         </span>
-        <SocialIcons size={14} />
+        <div className="hidden md:block"><SocialIcons size={14} /></div>
       </footer>
     </div>
   );
