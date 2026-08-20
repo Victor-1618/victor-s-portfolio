@@ -209,8 +209,14 @@ const Navbar = ({ onNavigate, currentSection }: { onNavigate: (index: number) =>
     { name: "Contact", index: 6, href: "#contact" },
   ];
 
+  const isHero = currentSection === 0;
+
   return (
-    <nav className="no-print fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-6 md:px-16 bg-black/50 backdrop-blur-md border-b border-white/5">
+    <nav
+      className={`no-print fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-8 py-5 md:px-16 bg-black/80 backdrop-blur-md border-b border-white/10 transition-all duration-500 ease-in-out ${
+        isHero ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-full pointer-events-none"
+      }`}
+    >
       <div className="text-2xl font-bold tracking-tighter font-sans">
         <a href="#home" onClick={go(0)}>Victor</a>
       </div>
@@ -480,7 +486,7 @@ const resume = {
 const ResumeSection = () => (
   <section
     id="resume-section"
-    className="section-vertical flex items-center justify-center px-8 md:px-16 bg-white/5 border-t border-white/5"
+    className="section-vertical flex items-center justify-center px-8 md:px-16 bg-white/5 border-t border-white/5 pt-24 pb-12"
   >
     <div className="w-full max-w-5xl mx-auto my-auto py-10">
       <div className="no-print flex items-center justify-between mb-8">
@@ -704,7 +710,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="section-vertical flex items-center justify-center px-8 md:px-16 border-t border-white/5">
+    <section id="contact" className="section-vertical flex items-center justify-center px-8 md:px-16 border-t border-white/5 pt-24 pb-12">
       <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
         <div className="flex flex-col gap-8">
           <div>
@@ -819,7 +825,7 @@ export default function App() {
 
       <div ref={scrollRef} className="vertical-scroll-container">
         {/* ── Home ── */}
-        <section id="home" className="section-vertical bg-grid flex items-center justify-center">
+        <section id="home" className="section-vertical bg-grid flex items-center justify-center pt-24 pb-12">
           <main className="w-full px-8 md:px-16 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] gap-12 xl:gap-20 items-center relative">
             <div className="flex flex-col order-2 lg:order-1">
               <HeroMain onChat={() => scrollToSection(6)} />
@@ -850,7 +856,7 @@ export default function App() {
         </section>
 
         {/* ── About ── */}
-        <section id="about" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 border-t border-white/5">
+        <section id="about" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 border-t border-white/5 pt-24 pb-12">
           <div className="max-w-4xl">
             <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-8">01. About Me</h2>
             <p className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.1] mb-12">
@@ -868,12 +874,12 @@ export default function App() {
         </section>
 
         {/* ── Skills ── */}
-        <section id="skills" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 bg-white/5 border-t border-white/5">
+        <section id="skills" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 bg-white/5 border-t border-white/5 pt-24 pb-12">
           <SkillsSection />
         </section>
 
         {/* ── Services ── */}
-        <section id="services" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 bg-white/5 border-t border-white/5">
+        <section id="services" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 bg-white/5 border-t border-white/5 pt-24 pb-12">
           <div className="w-full max-w-6xl">
             <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-16">03. Services</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -893,7 +899,7 @@ export default function App() {
         </section>
 
         {/* ── Works ── */}
-        <section id="works" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 border-t border-white/5">
+        <section id="works" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 border-t border-white/5 pt-24 pb-12">
           <div className="w-full max-w-6xl">
             <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-12">04. Selected Works</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
