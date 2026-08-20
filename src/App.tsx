@@ -444,49 +444,200 @@ const SkillsSection = () => (
 );
 
 // ─── GitHub Contributions Widget ──────────────────────────────────────────────
-const GitHubContributions = () => (
-  <div className="w-full mt-8 p-6 md:p-8 border border-zinc-800 bg-zinc-900/50 backdrop-blur-md rounded-2xl flex flex-col gap-6 shadow-2xl relative overflow-hidden group">
-    <div className="absolute -top-24 -right-24 w-48 h-48 bg-accent/10 rounded-full blur-3xl pointer-events-none group-hover:bg-accent/20 transition-all duration-700" />
+const GITHUB_USER = "Victor-1618";
 
-    <div className="flex flex-wrap items-center justify-between gap-4 relative z-10">
-      <div className="flex items-center gap-3.5">
-        <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/25 flex items-center justify-center text-accent shadow-sm">
-          <SiGit className="w-5 h-5" />
+type ContributionDay = {
+  date: string;
+  count: number;
+  level: number;
+};
+
+const LEVEL_CLASSES = [
+  "bg-white/[0.06]",
+  "bg-accent/25",
+  "bg-accent/45",
+  "bg-accent/75",
+  "bg-accent",
+];
+
+const parseDate = (date: string) => {
+  const [y, m, d] = date.split("-").map(Number);
+  return new Date(y, m - 1, d);
+};
+
+const GitHubContributions = () => {
+  const [days, setDays] = useState<ContributionDay[]>([]);
+  const [total, setTotal] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [hovered, setHovered] = useState<ContributionDay | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`https://github-contributions-api.jogruber.de/v4/${GITHUB_USER}?y=last`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch contributions");
+        return res.json();
+      })
+      .then((json: { total: { lastYear: number }; contributions: ContributionDay[] }) => {
+        if (cancelled) return;
+        setDays(json.contributions);
+        setTotal(json.total.lastYear);
+      })
+      .catch(() => {
+        if (!cancelled) setError(true);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Align the first week to Sunday columns, like GitHub
+  const weeks: (ContributionDay | null)[][] = [];
+  if (days.length > 0) {
+    const pad = parseDate(days[0].date).getDay();
+    let week: (ContributionDay | null)[] = Array.from({ length: pad }, () => null);
+    for (const day of days) {
+      week.push(day);
+      if (week.length === 7) {
+        weeks.push(week);
+        week = [];
+      }
+    }
+    if (week.length > 0) {
+      while (week.length < 7) week.push(null);
+      weeks.push(week);
+    }
+  }
+
+  // Label the first week column of each new month
+  const monthLabels: { label: string; index: number }[] = [];
+  if (days.length > 0) {
+    const pad = parseDate(days[0].date).getDay();
+    const seen = new Set<string>();
+    days.forEach((day, i) => {
+      const d = parseDate(day.date);
+      if (d.getDate() === 1) {
+        const label = d.toLocaleString("en-US", { month: "short" });
+        if (!seen.has(label)) {
+          seen.add(label);
+          monthLabels.push({ label, index: Math.floor((i + pad) / 7) });
+        }
+      }
+    });
+  }
+
+  const colPitch = 15;
+  const gridWidth = weeks.length > 0 ? weeks.length * colPitch - 3 : 700;
+
+  const readout = hovered
+    ? `${parseDate(hovered.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })} — ${hovered.count} contribution${hovered.count === 1 ? "" : "s"}`
+    : total !== null
+      ? `${total} contributions in the last year`
+      : "";
+
+  return (
+    <div className="w-full mt-8 p-6 md:p-8 border border-zinc-800 bg-zinc-900/50 backdrop-blur-md rounded-2xl flex flex-col gap-6 shadow-2xl relative overflow-hidden group">
+      <div className="absolute -top-24 -right-24 w-48 h-48 bg-accent/10 rounded-full blur-3xl pointer-events-none group-hover:bg-accent/20 transition-all duration-700" />
+
+      <div className="flex flex-wrap items-center justify-between gap-4 relative z-10">
+        <div className="flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/25 flex items-center justify-center text-accent shadow-sm">
+            <SiGit className="w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="text-base font-bold tracking-tight text-white flex items-center gap-2.5">
+              GitHub Activity &amp; Open Source
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse mr-1.5" />
+                Active
+              </span>
+            </h3>
+            <p className="text-xs text-gray-400 font-mono mt-0.5">github.com/Victor-1618</p>
+          </div>
         </div>
-        <div>
-          <h3 className="text-base font-bold tracking-tight text-white flex items-center gap-2.5">
-            GitHub Activity &amp; Open Source
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse mr-1.5" />
-              Active
-            </span>
-          </h3>
-          <p className="text-xs text-gray-400 font-mono mt-0.5">github.com/Victor-1618</p>
+        <a
+          href="https://github.com/Victor-1618"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-lg bg-zinc-800/80 border border-zinc-700/60 text-accent hover:bg-zinc-800 hover:border-accent/40 transition-all"
+        >
+          View Profile <ArrowUpRight className="w-3.5 h-3.5" />
+        </a>
+      </div>
+
+      {/* Scrollable Graph Container */}
+      <div className="w-full overflow-x-auto pb-1 relative z-10">
+        <div className="min-w-[700px] p-5 bg-black/80 border border-zinc-800/80 rounded-xl shadow-inner flex flex-col gap-3">
+          {/* Month labels */}
+          <div className="relative h-4" style={{ width: gridWidth }}>
+            {monthLabels.map((m) => (
+              <span
+                key={`${m.label}-${m.index}`}
+                className="absolute text-[9px] text-gray-500 font-mono uppercase tracking-wide"
+                style={{ left: m.index * colPitch }}
+              >
+                {m.label}
+              </span>
+            ))}
+          </div>
+
+          {/* Loading / error / heatmap */}
+          {loading ? (
+            <div className="flex items-center justify-center gap-2 py-10 text-xs font-mono text-gray-500">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+              Loading contributions…
+            </div>
+          ) : error ? (
+            <div className="py-10 text-center">
+              <p className="text-xs font-mono text-gray-500">Couldn't load contribution data.</p>
+              <p className="text-[10px] font-mono text-gray-600 mt-1">
+                <a href={`https://github.com/${GITHUB_USER}`} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+                  View profile directly
+                </a>
+              </p>
+            </div>
+          ) : (
+            <div className="flex gap-[3px]" style={{ width: gridWidth }}>
+              {weeks.map((week, wi) => (
+                <div key={wi} className="flex flex-col gap-[3px]">
+                  {week.map((day, di) =>
+                    day === null ? (
+                      <div key={di} className="w-3 h-3 rounded-[2px]" />
+                    ) : (
+                      <div
+                        key={day.date}
+                        title={`${day.count} contribution${day.count === 1 ? "" : "s"} on ${day.date}`}
+                        onMouseEnter={() => setHovered(day)}
+                        onMouseLeave={() => setHovered(null)}
+                        className={`w-3 h-3 rounded-[2px] cursor-pointer transition-transform duration-100 hover:scale-150 hover:ring-1 hover:ring-accent ${LEVEL_CLASSES[day.level] ?? "bg-white/[0.06]"}`}
+                      />
+                    )
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Readout + legend */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="h-4 text-[11px] font-mono text-gray-400 truncate">{readout}</div>
+            <div className="flex items-center gap-1.5 text-[9px] text-gray-500 font-mono uppercase tracking-wide">
+              <span>Less</span>
+              {LEVEL_CLASSES.map((c, i) => (
+                <span key={i} className={`w-3 h-3 rounded-[2px] ${c}`} />
+              ))}
+              <span>More</span>
+            </div>
+          </div>
         </div>
       </div>
-      <a
-        href="https://github.com/Victor-1618"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-lg bg-zinc-800/80 border border-zinc-700/60 text-accent hover:bg-zinc-800 hover:border-accent/40 transition-all"
-      >
-        View Profile <ArrowUpRight className="w-3.5 h-3.5" />
-      </a>
     </div>
-
-    {/* Scrollable Graph Container */}
-    <div className="w-full overflow-x-auto pb-1 relative z-10">
-      <div className="min-w-[650px] p-5 bg-black/80 border border-zinc-800/80 rounded-xl flex items-center justify-center shadow-inner">
-        <img
-          src="https://ghchart.rshah.org/7DD3FC/Victor-1618"
-          alt="Victor's GitHub Contribution Heatmap"
-          className="w-full h-auto filter brightness-110 contrast-125"
-          loading="lazy"
-        />
-      </div>
-    </div>
-  </div>
-);
+  );
+};
 
 // ─── Resume data ───────────────────────────────────────────────────────────────
 const resume = {
