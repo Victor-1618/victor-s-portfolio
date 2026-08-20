@@ -4,8 +4,62 @@
  */
 
 import { motion } from "motion/react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Check, Copy } from "lucide-react";
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import {
+  SiReact,
+  SiTypescript,
+  SiTailwindcss,
+  SiHtml5,
+  SiNodedotjs,
+  SiNestjs,
+  SiExpress,
+  SiPostgresql,
+  SiFigma,
+  SiGit,
+  SiFramer,
+  SiVercel,
+  SiHuggingface,
+  SiLangchain,
+} from "react-icons/si";
+import { FaBrain, FaChartLine } from "react-icons/fa";
+
+// ─── Typewriter effect ────────────────────────────────────────────────────────
+const useTypewriter = (phrases: string[], typeSpeed = 75, deleteSpeed = 40, pause = 1800) => {
+  const [display, setDisplay] = useState("");
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const current = phrases[phraseIndex % phrases.length];
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (!deleting && display === current) {
+      timeout = setTimeout(() => setDeleting(true), pause);
+    } else if (deleting && display === "") {
+      setDeleting(false);
+      setPhraseIndex((i) => (i + 1) % phrases.length);
+    } else {
+      timeout = setTimeout(
+        () => setDisplay((prev) => (deleting ? current.slice(0, prev.length - 1) : current.slice(0, prev.length + 1))),
+        deleting ? deleteSpeed : typeSpeed
+      );
+    }
+    return () => clearTimeout(timeout);
+  }, [display, deleting, phraseIndex, phrases, typeSpeed, deleteSpeed, pause]);
+
+  return display;
+};
+
+const TypeWriter = ({ phrases, className = "" }: { phrases: string[]; className?: string }) => {
+  const text = useTypewriter(phrases);
+  return (
+    <span className={`inline-flex items-center ${className}`}>
+      <span>{text}</span>
+      <span aria-hidden="true" className="type-cursor ml-1 text-white/70 font-light">|</span>
+    </span>
+  );
+};
 
 // ─── Social links data ────────────────────────────────────────────────────────
 const socials = [
@@ -114,9 +168,9 @@ const SocialIcons = ({ size = 16 }: { size?: number }) => (
             transition: "color 0.2s ease, border-color 0.2s ease, background 0.2s ease",
           }}
           onMouseEnter={e => {
-            (e.currentTarget as HTMLAnchorElement).style.color = "#00E5FF";
-            (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(0,229,255,0.4)";
-            (e.currentTarget as HTMLAnchorElement).style.background = "rgba(0,229,255,0.08)";
+            (e.currentTarget as HTMLAnchorElement).style.color = "#7DD3FC";
+            (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(125,211,252,0.4)";
+            (e.currentTarget as HTMLAnchorElement).style.background = "rgba(125,211,252,0.08)";
           }}
           onMouseLeave={e => {
             (e.currentTarget as HTMLAnchorElement).style.color = "rgba(156,163,175,1)";
@@ -131,6 +185,42 @@ const SocialIcons = ({ size = 16 }: { size?: number }) => (
   </div>
 );
 
+// ─── Email & copy-to-clipboard ─────────────────────────────────────────────────
+const EMAIL = "olaiyavf@gmail.com";
+
+const CopyEmailButton = () => {
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = EMAIL;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    }
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1600);
+  };
+
+  return (
+    <button
+      onClick={copy}
+      aria-label={copied ? "Email copied" : "Copy email address"}
+      title={copied ? "Copied!" : "Copy email address"}
+      className="flex items-center justify-center px-3 md:px-4 self-stretch border-l border-white/20 text-gray-300 hover:bg-white hover:text-black transition-colors cursor-pointer"
+    >
+      {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+    </button>
+  );
+};
+
 // ─── Navbar ────────────────────────────────────────────────────────────────────
 const Navbar = ({ onNavigate }: { onNavigate: (index: number) => void }) => {
   const go = (index: number) => (e: { preventDefault: () => void }) => {
@@ -138,21 +228,27 @@ const Navbar = ({ onNavigate }: { onNavigate: (index: number) => void }) => {
     onNavigate(index);
   };
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-6 md:px-16 bg-black/50 backdrop-blur-md border-b border-white/5">
+    <nav className="no-print fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-6 md:px-16 bg-black/50 backdrop-blur-md border-b border-white/5">
       <div className="text-2xl font-bold tracking-tighter font-sans">
         <a href="#home" onClick={go(0)}>Victor</a>
       </div>
-      <div className="hidden md:flex items-center gap-12 text-xs font-medium tracking-widest text-gray-400 uppercase">
+      <div className="hidden md:flex items-center gap-8 text-xs font-medium tracking-widest text-gray-400 uppercase">
         <a href="#about" onClick={go(1)} className="hover:text-accent transition-colors">About</a>
-        <a href="#services" onClick={go(2)} className="hover:text-accent transition-colors">Services</a>
-        <a href="#works" onClick={go(3)} className="hover:text-accent transition-colors">Works</a>
-        <a href="#contact" onClick={go(4)} className="hover:text-accent transition-colors">Contact</a>
+        <a href="#skills" onClick={go(2)} className="hover:text-accent transition-colors">Skills</a>
+        <a href="#services" onClick={go(3)} className="hover:text-accent transition-colors">Services</a>
+        <a href="#works" onClick={go(4)} className="hover:text-accent transition-colors">Works</a>
+        <a href="#resume-section" onClick={go(5)} className="hover:text-accent transition-colors">Resume</a>
+        <a href="#contact" onClick={go(6)} className="hover:text-accent transition-colors">Contact</a>
       </div>
       <div className="flex items-center gap-4">
         <div className="hidden md:block"><SocialIcons size={14} /></div>
-        <a href="mailto:olaiyavf@gmail.com" className="border border-white/20 px-6 py-3 text-xs font-medium tracking-widest normal-case hover:bg-white hover:text-black transition-all cursor-pointer">
-          olaiyavf@gmail.com
-        </a>
+        <div className="flex items-center border border-white/20 hover:border-white/40 transition-colors">
+          <a href={`mailto:${EMAIL}`} className="px-4 md:px-6 py-3 text-xs font-medium tracking-widest normal-case hover:bg-white hover:text-black transition-all cursor-pointer">
+            <span className="hidden sm:inline">{EMAIL}</span>
+            <span className="sm:hidden">Email</span>
+          </a>
+          <CopyEmailButton />
+        </div>
       </div>
     </nav>
   );
@@ -167,7 +263,8 @@ const HeroMain = ({ onChat }: { onChat: () => void }) => (
       transition={{ duration: 0.6 }}
       className="text-5xl md:text-7xl font-black leading-[0.9] tracking-tighter font-sans text-accent"
     >
-      Victor is <br /> Right Here!
+      Victor is <br />
+      <TypeWriter phrases={["Right Here!", "a Developer.", "a Full-Stack Engineer.", "a Builder."]} />
     </motion.h1>
     <motion.p
       initial={{ opacity: 0, y: 20 }}
@@ -218,7 +315,7 @@ const ServiceItem = ({ title, description }: { title: string; description: strin
 const Services = () => (
   <div className="flex flex-col gap-12">
     <ServiceItem title="Development" description="I offer full-stack development services that bring your digital concepts to life." />
-    <ServiceItem title="UI/UX Design" description="I design the visual interface and user experience of apps, from mobile to desktop." />
+    <ServiceItem title="Design to Code" description="I turn Figma designs into pixel-perfect, responsive websites and apps." />
     <ServiceItem title="Tech Strategy" description="I provide expert guidance on tech stacks, architecture, and product engineering." />
   </div>
 );
@@ -228,7 +325,7 @@ const works = [
   {
     id: "cuedra",
     name: "Cuedra",
-    tag: "Mobile App · Design & Dev",
+    tag: "Mobile App · Full-Stack",
     color: "#7C3AED",
     description: "A sleek scheduling and booking platform built for modern service businesses.",
     gradient: "linear-gradient(135deg, rgba(124,58,237,0.35) 0%, rgba(0,0,0,0.85) 100%)",
@@ -237,14 +334,14 @@ const works = [
     id: "homedra",
     name: "Homedra",
     tag: "Web Platform · Full-Stack",
-    color: "#00E5FF",
+    color: "#7DD3FC",
     description: "A smart home services marketplace connecting homeowners with verified professionals.",
-    gradient: "linear-gradient(135deg, rgba(0,229,255,0.2) 0%, rgba(0,0,0,0.85) 100%)",
+    gradient: "linear-gradient(135deg, rgba(125,211,252,0.2) 0%, rgba(0,0,0,0.85) 100%)",
   },
   {
     id: "cashedoutdollaz",
     name: "CashedOutDollaz",
-    tag: "E-Commerce · Design & Dev",
+    tag: "E-Commerce · Full-Stack",
     color: "#F59E0B",
     description: "A premium streetwear e-commerce store with a bold identity and seamless checkout.",
     gradient: "linear-gradient(135deg, rgba(245,158,11,0.3) 0%, rgba(0,0,0,0.85) 100%)",
@@ -252,18 +349,221 @@ const works = [
   {
     id: "playbool",
     name: "Playbool",
-    tag: "Sports App · UI/UX",
+    tag: "Sports App · Frontend",
     color: "#10B981",
     description: "An interactive sports engagement app with live stats, picks, and community features.",
     gradient: "linear-gradient(135deg, rgba(16,185,129,0.3) 0%, rgba(0,0,0,0.85) 100%)",
   },
 ];
 
+// ─── Skills data ───────────────────────────────────────────────────────────────
+const skills = [
+  {
+    category: "Frontend",
+    items: [
+      { name: "React / Next.js", level: 95, icon: SiReact },
+      { name: "TypeScript", level: 90, icon: SiTypescript },
+      { name: "Tailwind CSS", level: 92, icon: SiTailwindcss },
+      { name: "HTML & CSS", level: 95, icon: SiHtml5 },
+    ],
+  },
+  {
+    category: "Backend",
+    items: [
+      { name: "Node.js", level: 90, icon: SiNodedotjs },
+      { name: "NestJS", level: 85, icon: SiNestjs },
+      { name: "Express", level: 88, icon: SiExpress },
+      { name: "PostgreSQL", level: 85, icon: SiPostgresql },
+    ],
+  },
+  {
+    category: "AI & Machine Learning",
+    items: [
+      { name: "AI Integration", level: 88, icon: SiHuggingface },
+      { name: "LLM", level: 86, icon: FaBrain },
+      { name: "Prediction Models", level: 84, icon: FaChartLine },
+      { name: "LangChain", level: 80, icon: SiLangchain },
+    ],
+  },
+  {
+    category: "Tools & Cloud",
+    items: [
+      { name: "Figma", level: 90, icon: SiFigma },
+      { name: "Git & GitHub", level: 92, icon: SiGit },
+      { name: "Framer Motion", level: 85, icon: SiFramer },
+      { name: "Vercel", level: 90, icon: SiVercel },
+    ],
+  },
+];
+
+// ─── Skills section ────────────────────────────────────────────────────────────
+const SkillsSection = () => (
+  <div className="w-full max-w-6xl">
+    <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-6">02. Technical Skills</h2>
+    <p className="text-4xl md:text-5xl font-bold tracking-tight leading-[1.1] mb-12">
+      The tools I use to <span className="text-accent">build &amp; ship</span>.
+    </p>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {skills.map((group) => (
+        <div
+          key={group.category}
+          className="group p-8 border border-white/10 bg-white/[0.02] hover:border-accent/40 hover:bg-white/[0.04] transition-colors duration-500"
+        >
+          <h3 className="text-lg font-bold mb-7 tracking-tight flex items-center gap-3">
+            <span className="h-px w-6 bg-accent/60" />
+            {group.category}
+          </h3>
+          <div className="flex flex-col gap-5">
+            {group.items.map((item) => (
+              <div key={item.name}>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="flex items-center gap-2.5 text-sm text-gray-300 font-medium">
+                    <item.icon className="w-4 h-4 text-accent" aria-hidden="true" />
+                    {item.name}
+                  </span>
+                  <span className="text-xs text-gray-500 font-mono">{item.level}%</span>
+                </div>
+                <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${item.level}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.9, ease: "easeOut", delay: 0.1 }}
+                    className="h-full rounded-full bg-accent"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+// ─── Resume data ───────────────────────────────────────────────────────────────
+const resume = {
+  title: "Full-Stack & SaaS Developer",
+  summary:
+    "Full-stack & SaaS developer building fast, scalable websites, web apps, and AI-powered workflows. I turn Figma designs into pixel-perfect, production-ready apps — and I integrate AI into manual processes to automate them end-to-end.",
+  experience: [
+    {
+      role: "Full Stack & SaaS Developer (Freelance)",
+      company: "Lagos, Nigeria",
+      period: "2021 — Present",
+      points: [
+        "Built scalable SaaS platforms, admin dashboards, and business automation systems for international clients using React, Next.js, Node.js, NestJS, and Supabase.",
+        "Created AI-integrated solutions — LLM-powered tools, automated pipelines, and analytics dashboards — that replace manual workflows.",
+        "Integrated payments (PayPal, crypto gateways, fintech APIs), auth systems, and REST APIs.",
+        "Optimized performance with caching, pagination, and modern state management.",
+      ],
+    },
+    {
+      role: "Web3 Full Stack Developer (Freelance / Contract)",
+      company: "Remote",
+      period: "2022 — Present",
+      points: [
+        "Developed and deployed Solidity smart contracts — token presales, ERC-20 systems, and staking utilities on Binance Smart Chain.",
+        "Built Web3 dashboards, token launch platforms, and blockchain transaction analytics using Dexscreener and wallet connections.",
+      ],
+    },
+    {
+      role: "Frontend Developer",
+      company: "Studio & Client Work",
+      period: "2019 — 2021",
+      points: [
+        "Turned Figma designs into responsive, pixel-perfect websites and mobile apps.",
+        "Partnered with founders to define product strategy and technical roadmaps.",
+      ],
+    },
+  ],
+  education: [
+    { degree: "B.Sc. Computer Science", school: "Federal University of Oye Ekiti, Nigeria", period: "2020 — 2024" },
+  ],
+};
+
+// ─── Resume section ────────────────────────────────────────────────────────────
+const ResumeSection = () => (
+  <section
+    id="resume-section"
+    className="section-horizontal flex px-8 md:px-16 bg-white/5 border-l border-white/5"
+    style={{ overflowY: "auto" }}
+  >
+    <div className="w-full max-w-5xl mx-auto my-auto py-10">
+      <div className="no-print flex items-center justify-between mb-8">
+        <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em]">05. Resume</h2>
+        <button
+          onClick={() => window.print()}
+          className="bg-accent text-black px-6 py-3 font-bold uppercase tracking-widest text-xs hover:brightness-110 transition-all"
+        >
+          Download PDF
+        </button>
+      </div>
+
+      <div className="flex flex-col gap-10">
+        {/* Header */}
+        <div className="flex flex-col gap-2 border-b border-white/10 pb-8">
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-none">Victor Olaiya</h1>
+          <p className="text-accent text-lg font-semibold">{resume.title}</p>
+          <p className="text-gray-400 text-sm">{EMAIL} · github.com/Victor-1618 · linkedin.com/in/victor-olaiya</p>
+          <p className="text-gray-400 text-sm leading-relaxed max-w-3xl mt-2">{resume.summary}</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          {/* Experience */}
+          <div className="md:col-span-2 flex flex-col gap-8">
+            <h3 className="text-accent text-xs font-bold uppercase tracking-[0.3em]">Experience</h3>
+            {resume.experience.map((job) => (
+              <div key={job.role} className="border-l-2 border-accent/40 pl-6 flex flex-col gap-2">
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <h4 className="text-xl font-bold tracking-tight">{job.role}</h4>
+                  <span className="text-xs text-gray-500 font-mono">{job.period}</span>
+                </div>
+                <p className="text-accent text-sm font-semibold">{job.company}</p>
+                <ul className="flex flex-col gap-2 text-gray-400 text-sm leading-relaxed list-disc list-inside">
+                  {job.points.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          {/* Education & Skills */}
+          <div className="flex flex-col gap-8">
+            <div>
+              <h3 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-4">Education</h3>
+              {resume.education.map((edu) => (
+                <div key={edu.degree} className="flex flex-col gap-1">
+                  <h4 className="text-lg font-bold tracking-tight">{edu.degree}</h4>
+                  <p className="text-gray-400 text-sm">{edu.school}</p>
+                  <p className="text-gray-500 text-xs font-mono">{edu.period}</p>
+                </div>
+              ))}
+            </div>
+            <div>
+              <h3 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-4">Core Skills</h3>
+              <div className="flex flex-wrap gap-2">
+                {skills.flatMap((g) => g.items.slice(0, 2)).map((s) => (
+                  <span key={s.name} className="text-xs text-gray-300 border border-white/10 px-3 py-1.5 rounded-full">
+                    {s.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
 // ─── Nav Arrow Buttons ─────────────────────────────────────────────────────────
 const NavArrows = ({ onPrev, onNext, showLeft, showRight }: { onPrev: () => void; onNext: () => void; showLeft: boolean; showRight: boolean }) => (
   <>
     <button
       id="nav-prev"
+      className="no-print"
       onClick={onPrev}
       aria-label="Previous section"
       style={{
@@ -286,9 +586,9 @@ const NavArrows = ({ onPrev, onNext, showLeft, showRight }: { onPrev: () => void
         transition: "all 0.25s ease",
       }}
       onMouseEnter={e => {
-        (e.currentTarget as HTMLButtonElement).style.background = "rgba(0,229,255,0.15)";
-        (e.currentTarget as HTMLButtonElement).style.borderColor = "#00E5FF";
-        (e.currentTarget as HTMLButtonElement).style.color = "#00E5FF";
+        (e.currentTarget as HTMLButtonElement).style.background = "rgba(125,211,252,0.15)";
+        (e.currentTarget as HTMLButtonElement).style.borderColor = "#7DD3FC";
+        (e.currentTarget as HTMLButtonElement).style.color = "#7DD3FC";
         (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-50%) scale(1.1)";
       }}
       onMouseLeave={e => {
@@ -305,6 +605,7 @@ const NavArrows = ({ onPrev, onNext, showLeft, showRight }: { onPrev: () => void
 
     <button
       id="nav-next"
+      className="no-print"
       onClick={onNext}
       aria-label="Next section"
       style={{
@@ -327,9 +628,9 @@ const NavArrows = ({ onPrev, onNext, showLeft, showRight }: { onPrev: () => void
         transition: "all 0.25s ease",
       }}
       onMouseEnter={e => {
-        (e.currentTarget as HTMLButtonElement).style.background = "rgba(0,229,255,0.15)";
-        (e.currentTarget as HTMLButtonElement).style.borderColor = "#00E5FF";
-        (e.currentTarget as HTMLButtonElement).style.color = "#00E5FF";
+        (e.currentTarget as HTMLButtonElement).style.background = "rgba(125,211,252,0.15)";
+        (e.currentTarget as HTMLButtonElement).style.borderColor = "#7DD3FC";
+        (e.currentTarget as HTMLButtonElement).style.color = "#7DD3FC";
         (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-50%) scale(1.1)";
       }}
       onMouseLeave={e => {
@@ -352,7 +653,7 @@ const CALENDLY_URL = "https://calendly.com/olaiyavf/30min";
 const projectTypes = [
   "Web App Development",
   "Mobile App Development",
-  "UI/UX Design",
+  "Design to Code",
   "E-Commerce",
   "Tech Strategy / Consulting",
   "Something else",
@@ -410,7 +711,7 @@ const Contact = () => {
       <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
         <div className="flex flex-col gap-8">
           <div>
-            <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-6">04. Book a Call</h2>
+            <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-6">06. Book a Call</h2>
             <p className="text-4xl md:text-5xl font-bold tracking-tight leading-[1.1] mb-6">
               Let's build something <span className="text-accent">great together</span>.
             </p>
@@ -507,7 +808,7 @@ export default function App() {
     });
   };
 
-  const sectionCount = 5;
+  const sectionCount = 7;
 
   return (
     <div className="h-screen w-screen bg-black text-white selection:bg-accent selection:text-black overflow-hidden font-sans">
@@ -521,10 +822,10 @@ export default function App() {
 
       <div ref={scrollRef} className="horizontal-scroll-container">
         {/* ── Home ── */}
-        <section id="home" className="section-horizontal flex items-center justify-center">
-          <main className="w-full px-8 md:px-16 grid grid-cols-1 lg:grid-cols-[1fr_1fr_auto] gap-12 xl:gap-20 items-center relative">
+        <section id="home" className="section-horizontal bg-grid flex items-center justify-center">
+          <main className="w-full px-8 md:px-16 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] gap-12 xl:gap-20 items-center relative">
             <div className="flex flex-col order-2 lg:order-1">
-              <HeroMain onChat={() => scrollToSection(4)} />
+              <HeroMain onChat={() => scrollToSection(6)} />
               <Stats />
             </div>
 
@@ -539,7 +840,7 @@ export default function App() {
                 <img
                   src="/victor.png"
                   alt="Victor Portrait"
-                  className="relative w-64 h-auto md:w-80 lg:w-[450px] transition-all duration-700 drop-shadow-[0_0_30px_rgba(0,229,255,0.1)]"
+                  className="relative w-64 h-auto md:w-80 lg:w-[450px] transition-all duration-700 drop-shadow-[0_0_30px_rgba(125,211,252,0.1)]"
                   referrerPolicy="no-referrer"
                 />
               </div>
@@ -552,31 +853,36 @@ export default function App() {
         </section>
 
         {/* ── About ── */}
-        <section id="about" className="section-horizontal flex items-center justify-center px-8 md:px-16 border-l border-white/5">
+        <section id="about" className="section-horizontal bg-grid flex items-center justify-center px-8 md:px-16 border-l border-white/5">
           <div className="max-w-4xl">
             <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-8">01. About Me</h2>
             <p className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.1] mb-12">
-              I bridge the gap between <span className="text-accent">design and engineering</span>.
+              I build websites &amp; apps, and <span className="text-accent">integrate AI</span> into manual workflows.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-gray-400 text-lg leading-relaxed">
               <p>
-                Based in the digital realm, I specialize in building highly interactive and performant web applications. My approach combines technical rigor with a deep appreciation for aesthetics.
+                My core focus is creating fast, scalable websites and web applications end-to-end — from polished frontends to robust backends and APIs.
               </p>
               <p>
-                Whether it's architecting complex backends or crafting pixel-perfect frontends, I focus on creating experiences that feel intuitive and look exceptional.
+                Beyond that, I specialize in AI integrations and workflow automation — replacing repetitive manual processes with LLM-powered tools, automated pipelines, and smart dashboards.
               </p>
             </div>
           </div>
         </section>
 
+        {/* ── Skills ── */}
+        <section id="skills" className="section-horizontal bg-grid flex items-center justify-center px-8 md:px-16 bg-white/5 border-l border-white/5">
+          <SkillsSection />
+        </section>
+
         {/* ── Services ── */}
-        <section id="services" className="section-horizontal flex items-center justify-center px-8 md:px-16 bg-white/5 border-l border-white/5">
+        <section id="services" className="section-horizontal bg-grid flex items-center justify-center px-8 md:px-16 bg-white/5 border-l border-white/5">
           <div className="w-full">
-            <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-16">02. Services</h2>
+            <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-16">03. Services</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
               {[
                 { num: "01", title: "Full-stack Dev", desc: "Building robust, scalable applications from the ground up using modern technologies." },
-                { num: "02", title: "UI/UX Design", desc: "Creating user-centric interfaces that are as functional as they are beautiful." },
+                { num: "02", title: "Design to Code", desc: "Turning Figma designs into pixel-perfect, responsive websites and apps." },
                 { num: "03", title: "Product Strategy", desc: "Helping startups and brands define their digital roadmap and technical architecture." },
               ].map((s) => (
                 <div key={s.num} className="group p-8 border border-white/10 hover:border-accent/50 transition-all duration-500">
@@ -590,9 +896,9 @@ export default function App() {
         </section>
 
         {/* ── Works ── */}
-        <section id="works" className="section-horizontal flex items-center justify-center px-8 md:px-16 border-l border-white/5">
+        <section id="works" className="section-horizontal bg-grid flex items-center justify-center px-8 md:px-16 border-l border-white/5">
           <div className="w-full">
-            <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-12">03. Selected Works</h2>
+            <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-12">04. Selected Works</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {works.map((work, i) => (
                 <motion.div
@@ -661,12 +967,15 @@ export default function App() {
           </div>
         </section>
 
+        {/* ── Resume ── */}
+        <ResumeSection />
+
         {/* ── Contact ── */}
         <Contact />
       </div>
 
       {/* Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 px-8 md:px-16 py-4 border-t border-white/5 bg-black/50 backdrop-blur-sm z-40 flex items-center justify-between">
+      <footer className="no-print fixed bottom-0 left-0 right-0 px-8 md:px-16 py-4 border-t border-white/5 bg-black/50 backdrop-blur-sm z-40 flex items-center justify-between">
         <span className="text-gray-600 text-[10px] uppercase tracking-widest">
           &copy; {new Date().getFullYear()} Victor. All rights reserved.
         </span>
