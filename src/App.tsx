@@ -407,7 +407,7 @@ const SkillsSection = () => (
       {skills.map((group) => (
         <div
           key={group.category}
-          className="group p-8 border border-white/10 bg-white/[0.02] hover:border-accent/40 hover:bg-white/[0.04] transition-colors duration-500"
+          className="group p-8 border border-zinc-800 bg-zinc-900/40 hover:border-accent/50 hover:bg-zinc-900/80 transition-all duration-500 rounded-xl"
         >
           <h3 className="text-lg font-bold mb-7 tracking-tight flex items-center gap-3">
             <span className="h-px w-6 bg-accent/60" />
@@ -437,6 +437,51 @@ const SkillsSection = () => (
           </div>
         </div>
       ))}
+    </div>
+  </div>
+);
+
+// ─── GitHub Contributions Widget ──────────────────────────────────────────────
+const GitHubContributions = () => (
+  <div className="w-full mt-8 p-6 md:p-8 border border-zinc-800 bg-zinc-900/50 backdrop-blur-md rounded-2xl flex flex-col gap-6 shadow-2xl relative overflow-hidden group">
+    <div className="absolute -top-24 -right-24 w-48 h-48 bg-accent/10 rounded-full blur-3xl pointer-events-none group-hover:bg-accent/20 transition-all duration-700" />
+
+    <div className="flex flex-wrap items-center justify-between gap-4 relative z-10">
+      <div className="flex items-center gap-3.5">
+        <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/25 flex items-center justify-center text-accent shadow-sm">
+          <SiGit className="w-5 h-5" />
+        </div>
+        <div>
+          <h3 className="text-base font-bold tracking-tight text-white flex items-center gap-2.5">
+            GitHub Activity &amp; Open Source
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse mr-1.5" />
+              Active
+            </span>
+          </h3>
+          <p className="text-xs text-gray-400 font-mono mt-0.5">github.com/Victor-1618</p>
+        </div>
+      </div>
+      <a
+        href="https://github.com/Victor-1618"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-lg bg-zinc-800/80 border border-zinc-700/60 text-accent hover:bg-zinc-800 hover:border-accent/40 transition-all"
+      >
+        View Profile <ArrowUpRight className="w-3.5 h-3.5" />
+      </a>
+    </div>
+
+    {/* Scrollable Graph Container */}
+    <div className="w-full overflow-x-auto pb-1 relative z-10">
+      <div className="min-w-[650px] p-5 bg-black/80 border border-zinc-800/80 rounded-xl flex items-center justify-center shadow-inner">
+        <img
+          src="https://ghchart.rshah.org/7DD3FC/Victor-1618"
+          alt="Victor's GitHub Contribution Heatmap"
+          className="w-full h-auto filter brightness-110 contrast-125"
+          loading="lazy"
+        />
+      </div>
     </div>
   </div>
 );
@@ -486,7 +531,7 @@ const resume = {
 const ResumeSection = () => (
   <section
     id="resume-section"
-    className="section-vertical flex items-center justify-center px-8 md:px-16 bg-white/5 border-t border-white/5 pt-24 pb-12"
+    className="section-vertical flex items-center justify-center px-8 md:px-16 bg-zinc-950/70 border-t border-zinc-800/80 pt-24 pb-12"
   >
     <div className="w-full max-w-5xl mx-auto my-auto py-10">
       <div className="no-print flex items-center justify-between mb-8">
@@ -663,7 +708,7 @@ const projectTypes = [
 ];
 
 const inputClass =
-  "w-full bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent/60 focus:bg-white/[0.07] transition-colors";
+  "w-full bg-zinc-900/70 border border-zinc-800 px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent/60 focus:bg-zinc-900 transition-colors rounded-lg";
 
 const Contact = () => {
   const widgetRef = useRef<HTMLDivElement>(null);
@@ -856,13 +901,13 @@ export default function App() {
         </section>
 
         {/* ── About ── */}
-        <section id="about" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 border-t border-white/5 pt-24 pb-12">
-          <div className="max-w-4xl">
-            <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-8">01. About Me</h2>
-            <p className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.1] mb-12">
+        <section id="about" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 border-t border-zinc-800/80 pt-24 pb-12">
+          <div className="max-w-4xl w-full">
+            <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-4">01. About Me</h2>
+            <p className="text-3xl md:text-5xl font-bold tracking-tight leading-[1.1] mb-6">
               I build websites &amp; apps, and <span className="text-accent">integrate AI</span> into manual workflows.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-gray-400 text-lg leading-relaxed">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-400 text-base md:text-lg leading-relaxed">
               <p>
                 My core focus is creating fast, scalable websites and web applications end-to-end — from polished frontends to robust backends and APIs.
               </p>
@@ -870,16 +915,30 @@ export default function App() {
                 Beyond that, I specialize in AI integrations and workflow automation — replacing repetitive manual processes with LLM-powered tools, automated pipelines, and smart dashboards.
               </p>
             </div>
+
+            <div className="flex flex-wrap gap-3 mt-6">
+              <span className="text-xs font-mono px-3.5 py-1.5 rounded-full border border-zinc-800 bg-zinc-900/60 text-accent font-medium">
+                ⚡ Full-Stack &amp; SaaS
+              </span>
+              <span className="text-xs font-mono px-3.5 py-1.5 rounded-full border border-zinc-800 bg-zinc-900/60 text-purple-300 font-medium">
+                🤖 AI Workflows &amp; Automation
+              </span>
+              <span className="text-xs font-mono px-3.5 py-1.5 rounded-full border border-zinc-800 bg-zinc-900/60 text-emerald-300 font-medium">
+                🎨 Figma to Code Precision
+              </span>
+            </div>
+
+            <GitHubContributions />
           </div>
         </section>
 
         {/* ── Skills ── */}
-        <section id="skills" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 bg-white/5 border-t border-white/5 pt-24 pb-12">
+        <section id="skills" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 bg-zinc-950/70 border-t border-zinc-800/80 pt-24 pb-12">
           <SkillsSection />
         </section>
 
         {/* ── Services ── */}
-        <section id="services" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 bg-white/5 border-t border-white/5 pt-24 pb-12">
+        <section id="services" className="section-vertical bg-grid flex items-center justify-center px-8 md:px-16 bg-zinc-950/70 border-t border-zinc-800/80 pt-24 pb-12">
           <div className="w-full max-w-6xl">
             <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-16">03. Services</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -888,7 +947,7 @@ export default function App() {
                 { num: "02", title: "Design to Code", desc: "Turning Figma designs into pixel-perfect, responsive websites and apps." },
                 { num: "03", title: "Product Strategy", desc: "Helping startups and brands define their digital roadmap and technical architecture." },
               ].map((s) => (
-                <div key={s.num} className="group p-8 border border-white/10 hover:border-accent/50 transition-all duration-500">
+                <div key={s.num} className="group p-8 border border-zinc-800 bg-zinc-900/40 hover:border-accent/50 hover:bg-zinc-900/80 transition-all duration-500 rounded-xl">
                   <div className="text-accent font-mono text-sm mb-6">{s.num}</div>
                   <h3 className="text-2xl font-bold mb-4">{s.title}</h3>
                   <p className="text-gray-400 leading-relaxed">{s.desc}</p>
