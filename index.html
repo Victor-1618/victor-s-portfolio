@@ -3,7 +3,103 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Victor Olaiya — Portfolio</title>
+
+    <!-- Primary SEO -->
+    <title>Victor Olaiya — Full-Stack &amp; AI Developer | React, Next.js, Node.js</title>
+    <meta name="description" content="Victor Olaiya is a full-stack and AI developer building fast, scalable websites, web apps, SaaS platforms and LLM-powered automations. React, Next.js, Node.js, NestJS, Solidity. View projects and book a free call." />
+    <meta name="author" content="Victor Olaiya" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="keywords" content="Victor Olaiya, full-stack developer, AI developer, React developer, Next.js developer, Node.js developer, NestJS, TypeScript, AI integration, LLM automation, freelance web developer Nigeria, Web3 developer, Solidity" />
+    <link rel="canonical" href="https://victor-s-portfolio.vercel.app/" />
+
+    <!-- Theme / icons -->
+    <meta name="theme-color" content="#000000" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/victor.png" />
+
+    <!-- Open Graph (Facebook, LinkedIn, WhatsApp, Slack...) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://victor-s-portfolio.vercel.app/" />
+    <meta property="og:site_name" content="Victor Olaiya — Portfolio" />
+    <meta property="og:title" content="Victor Olaiya — Full-Stack &amp; AI Developer" />
+    <meta property="og:description" content="I build fast, scalable websites, web apps and AI-powered automations. Figma-to-code precision, full-stack engineering, LLM workflows. Book a free 30-min call." />
+    <meta property="og:image" content="https://victor-s-portfolio.vercel.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Victor Olaiya — Full-Stack &amp; AI Developer" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Victor Olaiya — Full-Stack &amp; AI Developer" />
+    <meta name="twitter:description" content="Fast, scalable websites, web apps and AI-powered automations. React · Next.js · Node.js · NestJS · AI/LLM." />
+    <meta name="twitter:image" content="https://victor-s-portfolio.vercel.app/og-image.png" />
+
+    <!-- Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://assets.calendly.com" />
+    <link rel="preconnect" href="https://github-contributions-api.jogruber.de" />
+
+    <!-- Structured data: Person + WebSite (helps Google & AI search engines) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://victor-s-portfolio.vercel.app/#person",
+          "name": "Victor Olaiya",
+          "givenName": "Victor",
+          "familyName": "Olaiya",
+          "jobTitle": "Full-Stack & AI Developer",
+          "description": "Full-stack and AI developer building fast, scalable websites, web applications, SaaS platforms and LLM-powered workflow automations.",
+          "email": "mailto:olaiyavf@gmail.com",
+          "url": "https://victor-s-portfolio.vercel.app/",
+          "image": "https://victor-s-portfolio.vercel.app/victor.png",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Lagos",
+            "addressCountry": "NG"
+          },
+          "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": "Federal University of Oye Ekiti"
+          },
+          "knowsLanguage": ["en"],
+          "knowsAbout": [
+            "React", "Next.js", "TypeScript", "Node.js", "NestJS", "Express",
+            "PostgreSQL", "Supabase", "Tailwind CSS", "Framer Motion",
+            "AI Integration", "LLM Automation", "LangChain", "Solidity",
+            "Web3", "Smart Contracts", "E-Commerce", "Shopify", "Figma to Code"
+          ],
+          "worksFor": {
+            "@type": "Organization",
+            "name": "Freelance"
+          },
+          "sameAs": [
+            "https://github.com/Victor-1618",
+            "https://www.linkedin.com/in/victor-olaiya-935a14159/",
+            "https://www.fiverr.com/s/ljawvXA"
+          ],
+          "makesOffer": [
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Full-stack web development" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Design to code (Figma to production)" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI integration & workflow automation" } }
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://victor-s-portfolio.vercel.app/#website",
+          "url": "https://victor-s-portfolio.vercel.app/",
+          "name": "Victor Olaiya — Portfolio",
+          "description": "Portfolio of Victor Olaiya, full-stack and AI developer.",
+          "publisher": { "@id": "https://victor-s-portfolio.vercel.app/#person" },
+          "inLanguage": "en"
+        }
+      ]
+    }
+    </script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-G893NXEF2D"></script>
@@ -15,9 +111,75 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <!--
+      Static, crawlable fallback content.
+      AI crawlers (GPTBot, ClaudeBot, PerplexityBot) do not execute JavaScript —
+      this semantic HTML mirrors the app so every crawler can read the portfolio.
+      It is replaced automatically when React mounts on #root.
+    -->
+    <div id="root">
+      <main style="background:#000;color:#fff;font-family:system-ui,sans-serif;padding:2rem;max-width:56rem;margin:0 auto;line-height:1.6;">
+        <h1>Victor Olaiya — Full-Stack &amp; AI Developer</h1>
+        <p>
+          I build fast, scalable websites and web applications end-to-end — polished frontends,
+          robust backends and APIs — and I integrate AI into manual workflows, replacing repetitive
+          processes with LLM-powered tools, automated pipelines and smart dashboards.
+        </p>
+
+        <h2>About</h2>
+        <p>
+          Victor Olaiya is a freelance full-stack and SaaS developer based in Lagos, Nigeria,
+          working with international clients since 2021. Core focus: full-stack development,
+          AI integrations and workflow automation, and pixel-perfect Figma-to-code delivery.
+        </p>
+
+        <h2>Skills</h2>
+        <ul>
+          <li><strong>Frontend:</strong> React, Next.js, TypeScript, Tailwind CSS, HTML &amp; CSS</li>
+          <li><strong>Backend:</strong> Node.js, NestJS, Express, PostgreSQL, Supabase</li>
+          <li><strong>AI &amp; Machine Learning:</strong> AI integration, LLM applications, prediction models, LangChain</li>
+          <li><strong>Tools &amp; Cloud:</strong> Figma, Git &amp; GitHub, Framer Motion, Vercel</li>
+          <li><strong>Web3:</strong> Solidity smart contracts, ERC-20 tokens, staking, Web3 dashboards</li>
+        </ul>
+
+        <h2>Services</h2>
+        <ul>
+          <li><strong>Full-stack development</strong> — robust, scalable applications from the ground up.</li>
+          <li><strong>Design to code</strong> — pixel-perfect, responsive websites and apps from Figma designs.</li>
+          <li><strong>Product strategy</strong> — digital roadmap and technical architecture for startups.</li>
+          <li><strong>AI integration</strong> — LLM-powered tools and end-to-end workflow automation.</li>
+        </ul>
+
+        <h2>Selected Works</h2>
+        <ul>
+          <li><a href="https://playbool.com" style="color:#7DD3FC">Playbool</a> — interactive sports engagement platform with live stats, picks and community features.</li>
+          <li><a href="https://soil2remedy.com" style="color:#7DD3FC">Soil2Remedy</a> — Shopify e-commerce store for natural remedies.</li>
+          <li><a href="https://isla13.com" style="color:#7DD3FC">Isla13</a> — decentralized cryptocurrency platform for Island 13 Coin (ISLA13).</li>
+          <li>Cuedra — scheduling and booking platform for modern service businesses.</li>
+          <li>Homedra — marketplace connecting homeowners with verified home-service professionals.</li>
+          <li>CashedOutDollaz — premium streetwear e-commerce store with seamless checkout.</li>
+        </ul>
+
+        <h2>Experience</h2>
+        <ul>
+          <li>Full Stack &amp; SaaS Developer (Freelance), Lagos, Nigeria — 2021 to present.</li>
+          <li>Web3 Full Stack Developer (Freelance/Contract) — 2022 to present.</li>
+          <li>Frontend Developer, Studio &amp; Client Work — 2019 to 2021.</li>
+        </ul>
+        <p>
+          B.Sc. Computer Science, Federal University of Oye Ekiti, Nigeria (2020–2024).
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          Email: <a href="mailto:olaiyavf@gmail.com" style="color:#7DD3FC">olaiyavf@gmail.com</a> ·
+          GitHub: <a href="https://github.com/Victor-1618" style="color:#7DD3FC">github.com/Victor-1618</a> ·
+          LinkedIn: <a href="https://www.linkedin.com/in/victor-olaiya-935a14159/" style="color:#7DD3FC">victor-olaiya</a> ·
+          Book a call: <a href="https://calendly.com/olaiyavf/30min" style="color:#7DD3FC">calendly.com/olaiyavf/30min</a>
+        </p>
+      </main>
+    </div>
     <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

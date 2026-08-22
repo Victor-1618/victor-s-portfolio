@@ -138,16 +138,10 @@ const SocialIcons = ({ size = 18 }: { size?: number }) => (
       >
         <span style={{ width: size, height: size, display: "flex", alignItems: "center", justifyContent: "center" }}>
           {s.id === "fiverr" ? (
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKTIiOwryrgCwR-tSlhi67187uXnV8ER2V-BHfbH-9cg&s=10"
-              alt="Fiverr"
-              style={{
-                width: size - 2,
-                height: size - 2,
-                objectFit: "contain",
-                borderRadius: "50%",
-              }}
-            />
+            <svg className="w-full h-full" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="12" r="11" fill="#1DBF73" />
+              <text x="12" y="16.5" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontWeight="bold" fontSize="13" fill="#fff">f</text>
+            </svg>
           ) : (
             s.icon
           )}
@@ -277,8 +271,9 @@ const HeroMain = ({ onChat }: { onChat: () => void }) => (
       transition={{ duration: 0.6 }}
       className="text-5xl md:text-7xl font-black leading-[0.9] tracking-tighter font-sans text-accent"
     >
-      <span className="bg-accent text-black px-1">Victor is</span> <br />
-      <span className="block mt-2">
+      <span className="sr-only">Victor Olaiya — Full-Stack &amp; AI Developer. </span>
+      <span aria-hidden="true" className="bg-accent text-black px-1">Victor is</span> <br />
+      <span aria-hidden="true" className="block mt-2">
         <TypeWriter phrases={["Right Here!", "a Developer.", "a Full-Stack Engineer.", "a Builder."]} />
       </span>
     </motion.h1>
@@ -286,6 +281,7 @@ const HeroMain = ({ onChat }: { onChat: () => void }) => (
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.2 }}
+      aria-hidden="true"
       className="text-gray-400 text-base md:text-lg leading-relaxed max-w-md font-medium"
     >
       With a creative mind for code. I love to build digital products that solve complex problems with simple solutions.
@@ -345,7 +341,52 @@ const Services = () => (
 );
 
 // ─── Works data ────────────────────────────────────────────────────────────────
-const works = [
+type Work = {
+  id: string;
+  name: string;
+  tag: string;
+  href?: string;
+  color: string;
+  description: string;
+  gradient: string;
+};
+
+const works: Work[] = [
+  {
+    id: "playbool",
+    name: "Playbool",
+    tag: "Sports App · Full-Stack",
+    href: "https://playbool.com",
+    color: "#10B981",
+    description: "An interactive sports engagement app with live stats, picks, and community features.",
+    gradient: "linear-gradient(135deg, rgba(16,185,129,0.3) 0%, rgba(0,0,0,0.85) 100%)",
+  },
+  {
+    id: "soil2remedy",
+    name: "Soil2Remedy",
+    tag: "E-Commerce · Shopify",
+    href: "https://soil2remedy.com",
+    color: "#84CC16",
+    description: "A natural-remedies e-commerce store built on Shopify with a clean, conversion-focused storefront.",
+    gradient: "linear-gradient(135deg, rgba(132,204,22,0.3) 0%, rgba(0,0,0,0.85) 100%)",
+  },
+  {
+    id: "isla13",
+    name: "Isla13",
+    tag: "Web3 · Crypto Platform",
+    href: "https://isla13.com",
+    color: "#38BDF8",
+    description: "Decentralized cryptocurrency platform for Island 13 Coin (ISLA13) — fast, secure, and accessible.",
+    gradient: "linear-gradient(135deg, rgba(56,189,248,0.25) 0%, rgba(0,0,0,0.85) 100%)",
+  },
+  {
+    id: "cashedoutdollaz",
+    name: "CashedOutDollaz",
+    tag: "E-Commerce · Full-Stack",
+    color: "#F59E0B",
+    description: "A premium streetwear e-commerce store with a bold identity and seamless checkout.",
+    gradient: "linear-gradient(135deg, rgba(245,158,11,0.3) 0%, rgba(0,0,0,0.85) 100%)",
+  },
   {
     id: "cuedra",
     name: "Cuedra",
@@ -361,22 +402,6 @@ const works = [
     color: "#7DD3FC",
     description: "A smart home services marketplace connecting homeowners with verified professionals.",
     gradient: "linear-gradient(135deg, rgba(125,211,252,0.2) 0%, rgba(0,0,0,0.85) 100%)",
-  },
-  {
-    id: "cashedoutdollaz",
-    name: "CashedOutDollaz",
-    tag: "E-Commerce · Full-Stack",
-    color: "#F59E0B",
-    description: "A premium streetwear e-commerce store with a bold identity and seamless checkout.",
-    gradient: "linear-gradient(135deg, rgba(245,158,11,0.3) 0%, rgba(0,0,0,0.85) 100%)",
-  },
-  {
-    id: "playbool",
-    name: "Playbool",
-    tag: "Sports App · Frontend",
-    color: "#10B981",
-    description: "An interactive sports engagement app with live stats, picks, and community features.",
-    gradient: "linear-gradient(135deg, rgba(16,185,129,0.3) 0%, rgba(0,0,0,0.85) 100%)",
   },
 ];
 
@@ -722,7 +747,7 @@ const ResumeSection = () => (
       <div className="flex flex-col gap-10">
         {/* Header */}
         <div className="flex flex-col gap-2 border-b border-white/10 pb-8">
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-none">Victor Olaiya</h1>
+          <h2 className="text-4xl md:text-5xl font-black tracking-tight leading-none">Victor Olaiya</h2>
           <p className="text-accent text-lg font-semibold">{resume.title}</p>
           <p className="text-gray-400 text-sm flex flex-wrap items-center gap-2">
             <a href={`mailto:${EMAIL}`} className="hover:text-accent transition-colors">{EMAIL}</a>
@@ -1083,8 +1108,9 @@ export default function App() {
                 <div className="absolute -inset-1 bg-accent/20 rounded-full blur-3xl group-hover:bg-accent/40 transition-all duration-500" />
                 <img
                   src="/victor.png"
-                  alt="Victor Portrait"
+                  alt="Victor Olaiya, full-stack and AI developer"
                   className="relative w-64 h-auto md:w-80 lg:w-[450px] transition-all duration-700 drop-shadow-[0_0_30px_rgba(125,211,252,0.1)]"
+                  fetchPriority="high"
                   referrerPolicy="no-referrer"
                 />
               </div>
@@ -1158,9 +1184,14 @@ export default function App() {
           <div className="w-full max-w-6xl">
             <h2 className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-12">04. Selected Works</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {works.map((work, i) => (
-                <motion.div
+              {works.map((work, i) => {
+                const CardTag = (work.href ? motion.a : motion.div) as typeof motion.div;
+                return (
+                <CardTag
                   key={work.id}
+                  {...(work.href
+                    ? { href: work.href, target: "_blank", rel: "noopener noreferrer", "aria-label": `${work.name} — visit site` }
+                    : {})}
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.45, delay: i * 0.08 }}
@@ -1215,12 +1246,15 @@ export default function App() {
                     {/* Bottom rule */}
                     <div className="flex items-center gap-2 mt-5">
                       <div className="h-px flex-1 bg-white/10" />
-                      <span className="text-[9px] text-gray-600 uppercase tracking-widest font-medium">View Project</span>
+                      <span className="text-[9px] text-gray-600 uppercase tracking-widest font-medium">
+                        {work.href ? "Visit Site" : "Selected Work"}
+                      </span>
                       <div className="h-px w-5" style={{ background: work.color + "50" }} />
                     </div>
                   </div>
-                </motion.div>
-              ))}
+                </CardTag>
+                );
+              })}
             </div>
           </div>
         </section>

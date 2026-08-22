@@ -1,0 +1,36 @@
+# Victor Olaiya — Full-Stack & AI Developer
+
+> Freelance full-stack and AI developer (Lagos, Nigeria) building fast, scalable websites, web apps, SaaS platforms and LLM-powered workflow automations. Available for hire.
+
+- [Portfolio](https://victor-s-portfolio.vercel.app/): official website with projects, skills, resume and booking.
+- [GitHub](https://github.com/Victor-1618): code and open-source activity.
+- [LinkedIn](https://www.linkedin.com/in/victor-olaiya-935a14159/): professional profile.
+- [Book a call](https://calendly.com/olaiyavf/30min): free 30-minute project consultation.
+- Email: olaiyavf@gmail.com
+
+## Services
+
+- **Full-stack development**: production web apps and SaaS platforms end-to-end.
+- **Design to code**: pixel-perfect, responsive implementation of Figma designs.
+- **AI integration & automation**: LLM-powered tools, automated pipelines, smart dashboards that replace manual workflows.
+- **Tech strategy**: stack selection, architecture and product engineering guidance.
+- **Web3 development**: Solidity smart contracts, token systems, Web3 dashboards.
+
+## Tech stack
+
+React, Next.js, TypeScript, Tailwind CSS · Node.js, NestJS, Express, PostgreSQL, Supabase ·
+AI/LLM integration, LangChain, prediction models · Solidity, ERC-20, Web3 · Figma, Git/GitHub, Vercel.
+
+## Selected live projects
+
+- [Playbool](https://playbool.com): interactive sports engagement platform with live stats, picks and community features.
+- [Soil2Remedy](https://soil2remedy.com): Shopify e-commerce store for natural remedies.
+- [Isla13](https://isla13.com): decentralized cryptocurrency platform for Island 13 Coin (ISLA13).
+- Cuedra: scheduling and booking platform for modern service businesses.
+- Homedra: marketplace connecting homeowners with verified home-service professionals.
+- CashedOutDollaz: premium streetwear e-commerce store.
+
+## Background
+
+- B.Sc. Computer Science, Federal University of Oye Ekiti, Nigeria (2020–2024).
+- Full Stack & SaaS Developer (Freelance) since 2021; Web3 developer since 2022.
